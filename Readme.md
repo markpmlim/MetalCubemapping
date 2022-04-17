@@ -1,7 +1,9 @@
 This project consists of 3 Demos involving the setting up of a cubic environment map.
 
 
-**Demo 1: Cubemapping.** It applies the concept of layer rendering in Metal to create a cube texture which will be displayed as a background environment map.
+**Demo 1: Cubemapping.** 
+
+It applies the concept of layer rendering in Metal to create a cube texture which will be displayed as a background environment map.
 
 Metal applications have 2 other ways of creating a cube map texture. One method is to instantiate six instances of 2D MTLTexture from 6 graphic images. The MTLTextureDescriptor class function is then called
 
