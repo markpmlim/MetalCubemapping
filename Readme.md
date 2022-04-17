@@ -124,13 +124,14 @@ void main()
 the order of output files is unexpected.
 ```
 
-Expected order	Generated order
-	+X                      +Z
-	-X                       -Z
-	+Y                      +Y	                rotated 90 deg anti-clockwise (orientation)
-	-Y                       -Y	                rotated 90 deg clockwise (orientation)
-	+Z                      -X
-	-Z                      +X
+|Expected order|	Generated order |
+| :---: | :---: |
+|	+X |                     +Z|
+|	-X |                     -Z|
+|	+Y |                     +Y|	                rotated 90 deg anti-clockwise (orientation)
+|	-Y |                     -Y|	                rotated 90 deg clockwise (orientation)
+|	+Z |                     -X|
+|	-Z |                     +X|
 
 As can be observed from the table above, 4 of the faces are not in the correct order.
 Also, the orientation of the top and bottom faces are wrong.
