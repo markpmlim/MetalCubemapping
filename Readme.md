@@ -1,7 +1,7 @@
 This project consists of 3 Demos involving the setting up of a cubic environment map.
 
 
-Demo 1: Cubemapping. It applies the concept of layer rendering in Metal to create a cube texture which will be displayed as a background environment map.
+**Demo 1: Cubemapping.** It applies the concept of layer rendering in Metal to create a cube texture which will be displayed as a background environment map.
 
 Metal applications have 2 other ways of creating a cube map texture. One method is to instantiate six instances of 2D MTLTexture from 6 graphic images. The MTLTextureDescriptor class function is then called
 
@@ -49,7 +49,7 @@ Both the second and third render passes are executed within the main display loo
 
 
 
-Demo 2: Convert six 2D Cubic environment maps to an EquiRectangular map.
+**Demo 2: Convert six 2D Cubic environment maps to an EquiRectangular map.**
 
 This demo loads and instantiates a MTLTexture of type MTLTextureTypeCube from 6 .HDR files located in the "Images" folder of this project. Two sets of .HDR files are provided; the sets have been converted from the files equirectImage.hdr and newport_loft.hdr.
 
@@ -64,7 +64,7 @@ Note: the previous iteration of this demo uses a special function to load hdr. T
 
 
 
-Demo 3: Convert an EquiRectangular image to six 2D images.
+**Demo 3: Convert an EquiRectangular image to six 2D images.**
 
 This demo converts an EquiRectangular image (2:1) to six 2D images by rendering to an off-screen cube texture (MTLTextureTypeCube)
 
@@ -161,9 +161,9 @@ The Metal fragment shader function of this demo is a port of the above OpenGL fr
 
 
 
-Requirements: XCode 9.x, Swift 4.x and macOS 10.13.4 or later.
+**Requirements:** XCode 9.x, Swift 4.x and macOS 10.13.4 or later.
 
-References:
+**References:**
 
 https://learnopengl.com/PBR/IBL/Diffuse-irradiance
 
