@@ -7,14 +7,17 @@ It applies the concept of layer rendering in Metal to create a cube texture whic
 
 Metal applications have 2 other ways of creating a cube map texture. One method is to instantiate six instances of 2D MTLTexture from 6 graphic images. The MTLTextureDescriptor class function is then called
 
+```swift
         textureCubeDescriptor(pixelFormat:, size:, mipmapped:)
-
+```
 to create a 3D cube MTLTexture. The pixels of the six 2D MTLTextures are copied to 6 slices of the 3D cube MTLTexture.
 
 
 Another method is to call the MTLTextureLoader function:
 
-	newTexture(name:, scaleFactor:, bundle:, options:)
+```swift
+newTexture(name:, scaleFactor:, bundle:, options:)
+```
 
 to load the 6 images to instantiate the cubemap texture. These 6 images are placed in a cubetexture set within the application's Assets.xcassets folder.
 
@@ -90,6 +93,7 @@ origin: lower left hand corner of the 2x2 quad with
 
 A previous iteration of this demo did not generate the six 2D textures in the correct order. If the following OpenGL fragment shader is run,
 
+```glsl
 #version 330 core
 
 out vec4 FragColor;
@@ -118,7 +122,7 @@ void main()
 }
 
 the order of output files is unexpected.
-
+```
 
 Expected order	Generated order
 	+X                      +Z
@@ -133,6 +137,7 @@ Also, the orientation of the top and bottom faces are wrong.
 
 If the line
 
+```glsl
     vec2 uv = vec2(atan(v.z, v.x),
                    asin(v.y));
 
@@ -140,13 +145,14 @@ is changed to
 
     vec2 uv = vec2(atan(v.x, v.z),
                    asin(v.y));
-
+```
 
 the six faces are generated in the correct order and orientation. This discrepancy could be due to the implementation in OpenGL drivers in macOS. 
 
 
 The Metal fragment shader function of this demo is a port of the above OpenGL fragment shader program with some modifications. Because the coordinate systems in Metal and OpenGL are different, the line of code listed above have to be written as:
 
+```cpp
     float2 uv;
     if (faceIndex == 2 || faceIndex == 3)
     {   // top, bottom
@@ -160,7 +166,7 @@ The Metal fragment shader function of this demo is a port of the above OpenGL fr
                     asin(direction.y));
 
     }
-
+```
 
 
 **Requirements:** XCode 9.x, Swift 4.x and macOS 10.13.4 or later.
