@@ -173,9 +173,11 @@ The Metal fragment shader function of this demo is a port of the above OpenGL fr
 ```
 <br />
 <br />
+
 **Requirements:** XCode 9.x, Swift 4.x and macOS 10.13.4 or later.
 <br />
 <br />
+
 **References:**
 
 https://learnopengl.com/PBR/IBL/Diffuse-irradiance
