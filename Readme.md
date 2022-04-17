@@ -67,11 +67,10 @@ Finally, within the main rendering loop, the generated EquiRectangular map is di
 
 The texture output by the fragment function "outputEquiRectangularTexture" can be saved to disk by pressing an "s"/"S" key. To output the 1:1 EquiRectangular map as a 2:1 graphic, an Affine transformation is performed on the generated 1:1 graphic.
 
-Note: the previous iteration of this demo uses a special function to load hdr. The EquiRectangular map was saved in HEIC format. Currently, the demo using 2 C functions viz. stbi_loadf() and stbi_write_hdr from the stb_image library to load and save the hdr images.  
+Note: the previous iteration of this demo uses a special function to load hdr. The EquiRectangular map was saved in HEIC format. Currently, the demo using 2 C functions viz. stbi_loadf() and stbi_write_hdr from the stb_image library to load and save the hdr images.
 <br />
 <br />
 <br />
-
 **Demo 3: Convert an EquiRectangular image to six 2D images.**
 
 This demo converts an EquiRectangular image (2:1) to six 2D images by rendering to an off-screen cube texture (MTLTextureTypeCube)
