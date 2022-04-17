@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,20 +11,132 @@
 		EE02FD1924F76EE9005A662D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE02FD1824F76EE9005A662D /* ViewController.swift */; };
 		EE02FD1B24F76EEA005A662D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE02FD1A24F76EEA005A662D /* Assets.xcassets */; };
 		EE02FD1E24F76EEA005A662D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE02FD1C24F76EEA005A662D /* Main.storyboard */; };
+		EE02FD2724F76F7B005A662D /* CubemapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE02FD2624F76F7B005A662D /* CubemapRenderer.swift */; };
+		EE0C3A0F254B923900E5BB96 /* newport_loft.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EE0C3A0D254B923900E5BB96 /* newport_loft.hdr */; };
+		EE36D84D2558A24B00CA1B8F /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3F025330F650033B5BB /* Mesh.swift */; };
+		EE36D84E2558A24F00CA1B8F /* TorusMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3F125330F650033B5BB /* TorusMesh.swift */; };
+		EE36D84F2558A29B00CA1B8F /* BoxMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3EF25330F650033B5BB /* BoxMesh.swift */; };
+		EE3CD3DE25330DB70033B5BB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3DD25330DB70033B5BB /* AppDelegate.swift */; };
+		EE3CD3E025330DB70033B5BB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3DF25330DB70033B5BB /* ViewController.swift */; };
+		EE3CD3E225330DB80033B5BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE3CD3E125330DB80033B5BB /* Assets.xcassets */; };
+		EE3CD3E525330DB80033B5BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE3CD3E325330DB80033B5BB /* Main.storyboard */; };
+		EE3CD3EE25330EB00033B5BB /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3ED25330EB00033B5BB /* Shaders.metal */; };
+		EE3CD3F325330F650033B5BB /* BoxMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3EF25330F650033B5BB /* BoxMesh.swift */; };
+		EE3CD3F425330F650033B5BB /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3F025330F650033B5BB /* Mesh.swift */; };
+		EE3CD3F525330F650033B5BB /* TorusMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3F125330F650033B5BB /* TorusMesh.swift */; };
+		EE3CD3F625330F650033B5BB /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3CD3F225330F650033B5BB /* Renderer.swift */; };
+		EE4B6AD828079196002E4E56 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = EE4B6AD728079196002E4E56 /* Readme.md */; };
+		EE4FA43F2807CF3E006236F8 /* MTKTextureLoader+STB.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4FA43E2807CF3E006236F8 /* MTKTextureLoader+STB.m */; };
+		EE544D692533396000B00C7E /* AAPLMathUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = EE544D682533396000B00C7E /* AAPLMathUtilities.m */; };
+		EE544D6A2533396000B00C7E /* AAPLMathUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = EE544D682533396000B00C7E /* AAPLMathUtilities.m */; };
+		EE61B7F924F7B298009338D9 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = EE61B7F824F7B298009338D9 /* Shaders.metal */; };
+		EE74C3F0280918270003FB11 /* WriteSTB.m in Sources */ = {isa = PBXBuildFile; fileRef = EE74C3EE280918270003FB11 /* WriteSTB.m */; };
+		EE7B801A2805AD6100065DF2 /* CubeMeshRH.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7B80192805AD6100065DF2 /* CubeMeshRH.swift */; };
+		EE8BA864280B747E0022A140 /* equirectImage.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEA5B4A127EEFB0E00100E9A /* equirectImage.hdr */; };
+		EE9359ED253880E300C5E447 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9359EC253880E300C5E447 /* AppDelegate.swift */; };
+		EE9359EF253880E300C5E447 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9359EE253880E300C5E447 /* ViewController.swift */; };
+		EE9359F1253880E500C5E447 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE9359F0253880E500C5E447 /* Assets.xcassets */; };
+		EE9359F4253880E500C5E447 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE9359F2253880E500C5E447 /* Main.storyboard */; };
+		EE9359FB2538823900C5E447 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9359FA2538823900C5E447 /* Renderer.swift */; };
+		EE9359FC2538838200C5E447 /* AAPLMathUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = EE544D682533396000B00C7E /* AAPLMathUtilities.m */; };
+		EE9359FE253885EB00C5E447 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = EE9359FD253885EB00C5E447 /* Shaders.metal */; };
+		EE9F14E9280AC3890028E674 /* MTKTextureLoader+STB.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4FA43E2807CF3E006236F8 /* MTKTextureLoader+STB.m */; };
+		EE9F14EA280AC57F0028E674 /* WriteSTB.m in Sources */ = {isa = PBXBuildFile; fileRef = EE74C3EE280918270003FB11 /* WriteSTB.m */; };
+		EEA5B4A227EEFB0E00100E9A /* equirectImage.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEA5B4A127EEFB0E00100E9A /* equirectImage.hdr */; };
+		EEAFE6C527F06079008E1CCF /* ny.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6BF27F06079008E1CCF /* ny.hdr */; };
+		EEAFE6C627F06079008E1CCF /* nz.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C027F06079008E1CCF /* nz.hdr */; };
+		EEAFE6C727F06079008E1CCF /* nx.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C127F06079008E1CCF /* nx.hdr */; };
+		EEAFE6C827F06079008E1CCF /* pz.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C227F06079008E1CCF /* pz.hdr */; };
+		EEAFE6C927F06079008E1CCF /* px.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C327F06079008E1CCF /* px.hdr */; };
+		EEAFE6CA27F06079008E1CCF /* py.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C427F06079008E1CCF /* py.hdr */; };
+		EEAFE6DD27F06157008E1CCF /* image00.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6CE27F06093008E1CCF /* image00.hdr */; };
+		EEAFE6DE27F06157008E1CCF /* image01.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6CF27F06093008E1CCF /* image01.hdr */; };
+		EEAFE6DF27F06157008E1CCF /* image02.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6CB27F06093008E1CCF /* image02.hdr */; };
+		EEAFE6E027F06157008E1CCF /* image03.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6CD27F06093008E1CCF /* image03.hdr */; };
+		EEAFE6E127F06157008E1CCF /* image04.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6CC27F06093008E1CCF /* image04.hdr */; };
+		EEAFE6E227F06157008E1CCF /* image05.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6D027F06093008E1CCF /* image05.hdr */; };
+		EEAFE6E327F0618D008E1CCF /* nx.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C127F06079008E1CCF /* nx.hdr */; };
+		EEAFE6E427F0618D008E1CCF /* ny.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6BF27F06079008E1CCF /* ny.hdr */; };
+		EEAFE6E527F0618D008E1CCF /* nz.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C027F06079008E1CCF /* nz.hdr */; };
+		EEAFE6E627F0618D008E1CCF /* px.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C327F06079008E1CCF /* px.hdr */; };
+		EEAFE6E727F0618D008E1CCF /* py.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C427F06079008E1CCF /* py.hdr */; };
+		EEAFE6E827F0618D008E1CCF /* pz.hdr in Resources */ = {isa = PBXBuildFile; fileRef = EEAFE6C227F06079008E1CCF /* pz.hdr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		EE02FD1324F76EE9005A662D /* MetalCubemapping.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalCubemapping.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE02FD1624F76EE9005A662D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EE02FD1824F76EE9005A662D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EE02FD1324F76EE9005A662D /* Cubemapping.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cubemapping.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE02FD1624F76EE9005A662D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE02FD1824F76EE9005A662D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		EE02FD1A24F76EEA005A662D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EE02FD1D24F76EEA005A662D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EE02FD1F24F76EEA005A662D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EE02FD2024F76EEA005A662D /* MetalCubemapping.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalCubemapping.entitlements; sourceTree = "<group>"; };
+		EE02FD2024F76EEA005A662D /* Cubemapping.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cubemapping.entitlements; sourceTree = "<group>"; };
+		EE02FD2624F76F7B005A662D /* CubemapRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubemapRenderer.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE0C3A0D254B923900E5BB96 /* newport_loft.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = newport_loft.hdr; sourceTree = "<group>"; };
+		EE3CD3DB25330DB70033B5BB /* EquiRect2CubemapRH.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EquiRect2CubemapRH.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE3CD3DD25330DB70033B5BB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE3CD3DF25330DB70033B5BB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE3CD3E125330DB80033B5BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EE3CD3E425330DB80033B5BB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EE3CD3E625330DB80033B5BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE3CD3E725330DB80033B5BB /* EquiRect2Cubemap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EquiRect2Cubemap.entitlements; sourceTree = "<group>"; };
+		EE3CD3ED25330EB00033B5BB /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; wrapsLines = 0; };
+		EE3CD3EF25330F650033B5BB /* BoxMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoxMesh.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE3CD3F025330F650033B5BB /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE3CD3F125330F650033B5BB /* TorusMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TorusMesh.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE3CD3F225330F650033B5BB /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE4B6AD728079196002E4E56 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; wrapsLines = 1; };
+		EE4FA43D2807C3A8006236F8 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		EE4FA43E2807CF3E006236F8 /* MTKTextureLoader+STB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MTKTextureLoader+STB.m"; sourceTree = "<group>"; };
+		EE4FA4402807D5F7006236F8 /* MTKTextureLoader+STB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MTKTextureLoader+STB.h"; sourceTree = "<group>"; };
+		EE544D672533396000B00C7E /* AAPLMathUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLMathUtilities.h; sourceTree = "<group>"; wrapsLines = 0; };
+		EE544D682533396000B00C7E /* AAPLMathUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLMathUtilities.m; sourceTree = "<group>"; wrapsLines = 0; };
+		EE61B7F424F7B0FA009338D9 /* Cubemapping-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cubemapping-Bridging-Header.h"; sourceTree = "<group>"; wrapsLines = 0; };
+		EE61B7F824F7B298009338D9 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; wrapsLines = 0; };
+		EE74C3ED280911130003FB11 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
+		EE74C3EE280918270003FB11 /* WriteSTB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WriteSTB.m; sourceTree = "<group>"; };
+		EE74C3EF280918270003FB11 /* WriteSTB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WriteSTB.h; sourceTree = "<group>"; };
+		EE7B80192805AD6100065DF2 /* CubeMeshRH.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CubeMeshRH.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE9359EA253880E300C5E447 /* Cubemap2EquiRect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cubemap2EquiRect.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE9359EC253880E300C5E447 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE9359EE253880E300C5E447 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE9359F0253880E500C5E447 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EE9359F3253880E500C5E447 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EE9359F5253880E500C5E447 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE9359F6253880E500C5E447 /* Cubemap2EquiRect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cubemap2EquiRect.entitlements; sourceTree = "<group>"; };
+		EE9359FA2538823900C5E447 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		EE9359FD253885EB00C5E447 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; wrapsLines = 0; };
+		EEA5B4A127EEFB0E00100E9A /* equirectImage.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = equirectImage.hdr; sourceTree = "<group>"; };
+		EEAFE6BF27F06079008E1CCF /* ny.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = ny.hdr; sourceTree = "<group>"; };
+		EEAFE6C027F06079008E1CCF /* nz.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = nz.hdr; sourceTree = "<group>"; };
+		EEAFE6C127F06079008E1CCF /* nx.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = nx.hdr; sourceTree = "<group>"; };
+		EEAFE6C227F06079008E1CCF /* pz.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = pz.hdr; sourceTree = "<group>"; };
+		EEAFE6C327F06079008E1CCF /* px.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = px.hdr; sourceTree = "<group>"; };
+		EEAFE6C427F06079008E1CCF /* py.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = py.hdr; sourceTree = "<group>"; };
+		EEAFE6CB27F06093008E1CCF /* image02.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = image02.hdr; sourceTree = "<group>"; };
+		EEAFE6CC27F06093008E1CCF /* image04.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = image04.hdr; sourceTree = "<group>"; };
+		EEAFE6CD27F06093008E1CCF /* image03.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = image03.hdr; sourceTree = "<group>"; };
+		EEAFE6CE27F06093008E1CCF /* image00.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = image00.hdr; sourceTree = "<group>"; };
+		EEAFE6CF27F06093008E1CCF /* image01.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = image01.hdr; sourceTree = "<group>"; };
+		EEAFE6D027F06093008E1CCF /* image05.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = image05.hdr; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		EE02FD1024F76EE9005A662D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE3CD3D825330DB70033B5BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE9359E7253880E300C5E447 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -37,38 +149,131 @@
 		EE02FD0A24F76EE9005A662D = {
 			isa = PBXGroup;
 			children = (
-				EE02FD1524F76EE9005A662D /* MetalCubemapping */,
+				EE4B6AD728079196002E4E56 /* Readme.md */,
+				EE0C3A0B254B91D600E5BB96 /* Images */,
+				EE544D652533393E00B00C7E /* Common */,
+				EE02FD1524F76EE9005A662D /* Cubemapping */,
+				EE9359EB253880E300C5E447 /* Cubemap2EquiRect */,
+				EE3CD3DC25330DB70033B5BB /* EquiRect2CubemapRH */,
 				EE02FD1424F76EE9005A662D /* Products */,
+				EE5EE175251C4D2500C24531 /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			wrapsLines = 1;
 		};
 		EE02FD1424F76EE9005A662D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EE02FD1324F76EE9005A662D /* MetalCubemapping.app */,
+				EE02FD1324F76EE9005A662D /* Cubemapping.app */,
+				EE3CD3DB25330DB70033B5BB /* EquiRect2CubemapRH.app */,
+				EE9359EA253880E300C5E447 /* Cubemap2EquiRect.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		EE02FD1524F76EE9005A662D /* MetalCubemapping */ = {
+		EE02FD1524F76EE9005A662D /* Cubemapping */ = {
 			isa = PBXGroup;
 			children = (
 				EE02FD1624F76EE9005A662D /* AppDelegate.swift */,
+				EE02FD2624F76F7B005A662D /* CubemapRenderer.swift */,
 				EE02FD1824F76EE9005A662D /* ViewController.swift */,
+				EE61B7F824F7B298009338D9 /* Shaders.metal */,
 				EE02FD1A24F76EEA005A662D /* Assets.xcassets */,
 				EE02FD1C24F76EEA005A662D /* Main.storyboard */,
 				EE02FD1F24F76EEA005A662D /* Info.plist */,
-				EE02FD2024F76EEA005A662D /* MetalCubemapping.entitlements */,
+				EE02FD2024F76EEA005A662D /* Cubemapping.entitlements */,
+				EE61B7F424F7B0FA009338D9 /* Cubemapping-Bridging-Header.h */,
 			);
-			path = MetalCubemapping;
+			path = Cubemapping;
 			sourceTree = "<group>";
+			wrapsLines = 0;
+		};
+		EE0C3A0B254B91D600E5BB96 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				EEAFE6CE27F06093008E1CCF /* image00.hdr */,
+				EEAFE6CF27F06093008E1CCF /* image01.hdr */,
+				EEAFE6CB27F06093008E1CCF /* image02.hdr */,
+				EEAFE6CD27F06093008E1CCF /* image03.hdr */,
+				EEAFE6CC27F06093008E1CCF /* image04.hdr */,
+				EEAFE6D027F06093008E1CCF /* image05.hdr */,
+				EEAFE6C127F06079008E1CCF /* nx.hdr */,
+				EEAFE6BF27F06079008E1CCF /* ny.hdr */,
+				EEAFE6C027F06079008E1CCF /* nz.hdr */,
+				EEAFE6C327F06079008E1CCF /* px.hdr */,
+				EEAFE6C427F06079008E1CCF /* py.hdr */,
+				EEAFE6C227F06079008E1CCF /* pz.hdr */,
+				EEA5B4A127EEFB0E00100E9A /* equirectImage.hdr */,
+				EE0C3A0D254B923900E5BB96 /* newport_loft.hdr */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		EE3CD3DC25330DB70033B5BB /* EquiRect2CubemapRH */ = {
+			isa = PBXGroup;
+			children = (
+				EE3CD3DD25330DB70033B5BB /* AppDelegate.swift */,
+				EE7B80192805AD6100065DF2 /* CubeMeshRH.swift */,
+				EE3CD3F225330F650033B5BB /* Renderer.swift */,
+				EE3CD3DF25330DB70033B5BB /* ViewController.swift */,
+				EE3CD3ED25330EB00033B5BB /* Shaders.metal */,
+				EE3CD3E125330DB80033B5BB /* Assets.xcassets */,
+				EE3CD3E325330DB80033B5BB /* Main.storyboard */,
+				EE3CD3E625330DB80033B5BB /* Info.plist */,
+				EE3CD3E725330DB80033B5BB /* EquiRect2Cubemap.entitlements */,
+			);
+			path = EquiRect2CubemapRH;
+			sourceTree = "<group>";
+			wrapsLines = 0;
+		};
+		EE544D652533393E00B00C7E /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				EE544D672533396000B00C7E /* AAPLMathUtilities.h */,
+				EE544D682533396000B00C7E /* AAPLMathUtilities.m */,
+				EE3CD3EF25330F650033B5BB /* BoxMesh.swift */,
+				EE3CD3F025330F650033B5BB /* Mesh.swift */,
+				EE3CD3F125330F650033B5BB /* TorusMesh.swift */,
+				EE4FA43D2807C3A8006236F8 /* stb_image.h */,
+				EE74C3ED280911130003FB11 /* stb_image_write.h */,
+				EE4FA4402807D5F7006236F8 /* MTKTextureLoader+STB.h */,
+				EE4FA43E2807CF3E006236F8 /* MTKTextureLoader+STB.m */,
+				EE74C3EF280918270003FB11 /* WriteSTB.h */,
+				EE74C3EE280918270003FB11 /* WriteSTB.m */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+			wrapsLines = 0;
+		};
+		EE5EE175251C4D2500C24531 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EE9359EB253880E300C5E447 /* Cubemap2EquiRect */ = {
+			isa = PBXGroup;
+			children = (
+				EE9359EC253880E300C5E447 /* AppDelegate.swift */,
+				EE9359FA2538823900C5E447 /* Renderer.swift */,
+				EE9359FD253885EB00C5E447 /* Shaders.metal */,
+				EE9359EE253880E300C5E447 /* ViewController.swift */,
+				EE9359F0253880E500C5E447 /* Assets.xcassets */,
+				EE9359F2253880E500C5E447 /* Main.storyboard */,
+				EE9359F5253880E500C5E447 /* Info.plist */,
+				EE9359F6253880E500C5E447 /* Cubemap2EquiRect.entitlements */,
+			);
+			path = Cubemap2EquiRect;
+			sourceTree = "<group>";
+			wrapsLines = 0;
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EE02FD1224F76EE9005A662D /* MetalCubemapping */ = {
+		EE02FD1224F76EE9005A662D /* Cubemapping */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EE02FD2324F76EEA005A662D /* Build configuration list for PBXNativeTarget "MetalCubemapping" */;
+			buildConfigurationList = EE02FD2324F76EEA005A662D /* Build configuration list for PBXNativeTarget "Cubemapping" */;
 			buildPhases = (
 				EE02FD0F24F76EE9005A662D /* Sources */,
 				EE02FD1024F76EE9005A662D /* Frameworks */,
@@ -78,9 +283,43 @@
 			);
 			dependencies = (
 			);
-			name = MetalCubemapping;
+			name = Cubemapping;
 			productName = MetalCubemapping;
-			productReference = EE02FD1324F76EE9005A662D /* MetalCubemapping.app */;
+			productReference = EE02FD1324F76EE9005A662D /* Cubemapping.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EE3CD3DA25330DB70033B5BB /* EquiRect2CubemapRH */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE3CD3EA25330DB80033B5BB /* Build configuration list for PBXNativeTarget "EquiRect2CubemapRH" */;
+			buildPhases = (
+				EE3CD3D725330DB70033B5BB /* Sources */,
+				EE3CD3D825330DB70033B5BB /* Frameworks */,
+				EE3CD3D925330DB70033B5BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EquiRect2CubemapRH;
+			productName = EquiRect2Cubemap;
+			productReference = EE3CD3DB25330DB70033B5BB /* EquiRect2CubemapRH.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EE9359E9253880E300C5E447 /* Cubemap2EquiRect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE9359F9253880E500C5E447 /* Build configuration list for PBXNativeTarget "Cubemap2EquiRect" */;
+			buildPhases = (
+				EE9359E6253880E300C5E447 /* Sources */,
+				EE9359E7253880E300C5E447 /* Frameworks */,
+				EE9359E8253880E300C5E447 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cubemap2EquiRect;
+			productName = Cubemap2EquiRect;
+			productReference = EE9359EA253880E300C5E447 /* Cubemap2EquiRect.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -95,11 +334,22 @@
 				TargetAttributes = {
 					EE02FD1224F76EE9005A662D = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1010;
+						ProvisioningStyle = Automatic;
+					};
+					EE3CD3DA25330DB70033B5BB = {
+						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 0940;
+						ProvisioningStyle = Automatic;
+					};
+					EE9359E9253880E300C5E447 = {
+						CreatedOnToolsVersion = 9.4.1;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = EE02FD0E24F76EE9005A662D /* Build configuration list for PBXProject "MetalCubemapping" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -111,7 +361,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EE02FD1224F76EE9005A662D /* MetalCubemapping */,
+				EE02FD1224F76EE9005A662D /* Cubemapping */,
+				EE9359E9253880E300C5E447 /* Cubemap2EquiRect */,
+				EE3CD3DA25330DB70033B5BB /* EquiRect2CubemapRH */,
 			);
 		};
 /* End PBXProject section */
@@ -121,8 +373,48 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE4B6AD828079196002E4E56 /* Readme.md in Resources */,
+				EEAFE6C627F06079008E1CCF /* nz.hdr in Resources */,
+				EEAFE6C827F06079008E1CCF /* pz.hdr in Resources */,
+				EEAFE6C927F06079008E1CCF /* px.hdr in Resources */,
+				EEAFE6CA27F06079008E1CCF /* py.hdr in Resources */,
+				EEAFE6C727F06079008E1CCF /* nx.hdr in Resources */,
+				EEA5B4A227EEFB0E00100E9A /* equirectImage.hdr in Resources */,
+				EEAFE6C527F06079008E1CCF /* ny.hdr in Resources */,
 				EE02FD1B24F76EEA005A662D /* Assets.xcassets in Resources */,
 				EE02FD1E24F76EEA005A662D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE3CD3D925330DB70033B5BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE8BA864280B747E0022A140 /* equirectImage.hdr in Resources */,
+				EE0C3A0F254B923900E5BB96 /* newport_loft.hdr in Resources */,
+				EE3CD3E525330DB80033B5BB /* Main.storyboard in Resources */,
+				EE3CD3E225330DB80033B5BB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE9359E8253880E300C5E447 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EEAFE6E327F0618D008E1CCF /* nx.hdr in Resources */,
+				EEAFE6E427F0618D008E1CCF /* ny.hdr in Resources */,
+				EEAFE6E527F0618D008E1CCF /* nz.hdr in Resources */,
+				EEAFE6E627F0618D008E1CCF /* px.hdr in Resources */,
+				EEAFE6E727F0618D008E1CCF /* py.hdr in Resources */,
+				EEAFE6E827F0618D008E1CCF /* pz.hdr in Resources */,
+				EE9359F1253880E500C5E447 /* Assets.xcassets in Resources */,
+				EE9359F4253880E500C5E447 /* Main.storyboard in Resources */,
+				EEAFE6DD27F06157008E1CCF /* image00.hdr in Resources */,
+				EEAFE6DE27F06157008E1CCF /* image01.hdr in Resources */,
+				EEAFE6DF27F06157008E1CCF /* image02.hdr in Resources */,
+				EEAFE6E127F06157008E1CCF /* image04.hdr in Resources */,
+				EEAFE6E027F06157008E1CCF /* image03.hdr in Resources */,
+				EEAFE6E227F06157008E1CCF /* image05.hdr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,8 +425,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE02FD1924F76EE9005A662D /* ViewController.swift in Sources */,
+				EE544D692533396000B00C7E /* AAPLMathUtilities.m in Sources */,
 				EE02FD1724F76EE9005A662D /* AppDelegate.swift in Sources */,
+				EE02FD2724F76F7B005A662D /* CubemapRenderer.swift in Sources */,
+				EE02FD1924F76EE9005A662D /* ViewController.swift in Sources */,
+				EE61B7F924F7B298009338D9 /* Shaders.metal in Sources */,
+				EE36D84D2558A24B00CA1B8F /* Mesh.swift in Sources */,
+				EE36D84E2558A24F00CA1B8F /* TorusMesh.swift in Sources */,
+				EE36D84F2558A29B00CA1B8F /* BoxMesh.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE3CD3D725330DB70033B5BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE544D6A2533396000B00C7E /* AAPLMathUtilities.m in Sources */,
+				EE3CD3F325330F650033B5BB /* BoxMesh.swift in Sources */,
+				EE3CD3F525330F650033B5BB /* TorusMesh.swift in Sources */,
+				EE3CD3F425330F650033B5BB /* Mesh.swift in Sources */,
+				EE7B801A2805AD6100065DF2 /* CubeMeshRH.swift in Sources */,
+				EE3CD3EE25330EB00033B5BB /* Shaders.metal in Sources */,
+				EE3CD3E025330DB70033B5BB /* ViewController.swift in Sources */,
+				EE3CD3DE25330DB70033B5BB /* AppDelegate.swift in Sources */,
+				EE3CD3F625330F650033B5BB /* Renderer.swift in Sources */,
+				EE9F14E9280AC3890028E674 /* MTKTextureLoader+STB.m in Sources */,
+				EE9F14EA280AC57F0028E674 /* WriteSTB.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE9359E6253880E300C5E447 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE9359EF253880E300C5E447 /* ViewController.swift in Sources */,
+				EE9359ED253880E300C5E447 /* AppDelegate.swift in Sources */,
+				EE9359FB2538823900C5E447 /* Renderer.swift in Sources */,
+				EE9359FC2538838200C5E447 /* AAPLMathUtilities.m in Sources */,
+				EE9359FE253885EB00C5E447 /* Shaders.metal in Sources */,
+				EE74C3F0280918270003FB11 /* WriteSTB.m in Sources */,
+				EE4FA43F2807CF3E006236F8 /* MTKTextureLoader+STB.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +475,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				EE02FD1D24F76EEA005A662D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		EE3CD3E325330DB80033B5BB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EE3CD3E425330DB80033B5BB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		EE9359F2253880E500C5E447 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EE9359F3253880E500C5E447 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -203,7 +549,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -257,11 +603,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -269,16 +614,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MetalCubemapping/MetalCubemapping.entitlements;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Cubemapping/Cubemapping.entitlements;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = MetalCubemapping/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				INFOPLIST_FILE = Cubemapping/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = "Incremental-Innovation.MetalCubemapping";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cubemapping/Cubemapping-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -287,16 +636,91 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MetalCubemapping/MetalCubemapping.entitlements;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Cubemapping/Cubemapping.entitlements;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = MetalCubemapping/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				INFOPLIST_FILE = Cubemapping/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "Incremental-Innovation.MetalCubemapping";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cubemapping/Cubemapping-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		EE3CD3E825330DB80033B5BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = EquiRect2CubemapRH/EquiRect2Cubemap.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = EquiRect2CubemapRH/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "Incremental-Innovation.EquiRect2CubemapRH";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "EquiRect2CubemapRH/EquiRect2Cubemap-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		EE3CD3E925330DB80033B5BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = EquiRect2CubemapRH/EquiRect2Cubemap.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = EquiRect2CubemapRH/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = "Incremental-Innovation.EquiRect2CubemapRH";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "EquiRect2CubemapRH/EquiRect2Cubemap-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		EE9359F7253880E500C5E447 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Cubemap2EquiRect/Cubemap2EquiRect.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Cubemap2EquiRect/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				PRODUCT_BUNDLE_IDENTIFIER = "Incremental-Innovation.Cubemap2EquiRect";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cubemap2EquiRect/Cubemap2EquiRect-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		EE9359F8253880E500C5E447 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Cubemap2EquiRect/Cubemap2EquiRect.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Cubemap2EquiRect/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = "Incremental-Innovation.Cubemap2EquiRect";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cubemap2EquiRect/Cubemap2EquiRect-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -313,11 +737,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EE02FD2324F76EEA005A662D /* Build configuration list for PBXNativeTarget "MetalCubemapping" */ = {
+		EE02FD2324F76EEA005A662D /* Build configuration list for PBXNativeTarget "Cubemapping" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EE02FD2424F76EEA005A662D /* Debug */,
 				EE02FD2524F76EEA005A662D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE3CD3EA25330DB80033B5BB /* Build configuration list for PBXNativeTarget "EquiRect2CubemapRH" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE3CD3E825330DB80033B5BB /* Debug */,
+				EE3CD3E925330DB80033B5BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE9359F9253880E500C5E447 /* Build configuration list for PBXNativeTarget "Cubemap2EquiRect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE9359F7253880E500C5E447 /* Debug */,
+				EE9359F8253880E500C5E447 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

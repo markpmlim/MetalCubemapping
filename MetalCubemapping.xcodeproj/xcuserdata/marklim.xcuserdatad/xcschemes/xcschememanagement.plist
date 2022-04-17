@@ -4,10 +4,58 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Cubemap2EquiRect.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>Cubemapping.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>EquiRect2Cubemap.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>EquiRect2CubemapRH.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>MetalCubemapping.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>EE02FD1224F76EE9005A662D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EE0C3A13254B92B000E5BB96</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EE3CD3DA25330DB70033B5BB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EE9359E9253880E300C5E447</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EEA20C1425D48DC700C8BB2D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
