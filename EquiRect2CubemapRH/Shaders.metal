@@ -93,6 +93,11 @@ constant float2 invAtan = float2(0.15915, 0.31831);   // 1/2π, 1/π
     + x-axis: horizontally right
     + y-axis: vertically up
     + z-axis: perpendicularly into the screen
+    
+  The 2D Texture coodinate system in Metal is also different from that of OpenGL.
+    origin: top left hand corner
+    s-axis: horizontally from left to the right
+    t-axis: vertically from top to bottom
  */
 float2 sampleSphericalMap(float3 direction, uint faceIndex)
 {
@@ -119,9 +124,6 @@ float2 sampleSphericalMap(float3 direction, uint faceIndex)
 }
 
 // Render to an offscreen texture object in this case a 2D texture.
-// Metal texture coord system has the origin at the top left corner.
-// s-axis is positive to the right
-// t-axis is positive downwards
 fragment half4
 outputCubeMapTexture(MappingVertex      mappingVertex   [[stage_in]],
                      texture2d<half> equirectangularMap [[texture(0)]])
