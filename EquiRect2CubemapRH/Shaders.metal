@@ -1,6 +1,6 @@
 //
 //  Shaders.metal
-//  TexturedCube1
+//  EquitRect2CubemapRH
 //
 //  Created by Mark Lim Pak Mun on 11/10/2020.
 //  Copyright © 2020 Mark Lim Pak Mun. All rights reserved.
