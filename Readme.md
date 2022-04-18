@@ -153,7 +153,7 @@ is changed to
 the six faces are generated in the correct order and orientation. This discrepancy could be due to the implementation in OpenGL drivers in macOS. 
 
 
-The Metal fragment shader function of this demo is a port of the above OpenGL fragment shader program with some modifications. Because the coordinate systems in Metal and OpenGL are different, the line of code listed above have to be written as:
+The Metal fragment shader function of this demo is a port of the above OpenGL fragment shader program with some modifications. Because the 2D texture coordinate systems in Metal and OpenGL are different, the line of code listed above have to be written as:
 
 ```cpp
     float2 uv;
