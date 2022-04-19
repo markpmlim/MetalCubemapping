@@ -128,15 +128,16 @@ the order of output files is unexpected.
 
 |Expected order|	Generated order | Orientation |
 | :---: | :---: | :---:|
-|	+X |                     +Z| correct |
-|	-X |                     -Z| correct |
-|	+Y |                     +Y| rotated 90 deg anti-clockwise |
-|	-Y |                     -Y| rotated 90 deg clockwise |
-|	+Z |                     -X| correct |
-|	-Z |                     +X| correct |
+| +X | +Z| flipped horizontally |
+| -X | -Z| flipped horizontally |
+| +Y | +Y| flipped vertically & rotated 90 deg anti-clockwise |
+| -Y | -Y| flipped vertically & rotated 90 deg clockwise |
+| +Z | +X| flipped horizontally |
+| -Z | -X| flipped horizontally |
+
 
 As can be observed from the table above, 4 of the faces are not in the correct order.
-Also, the orientation of the top and bottom faces are wrong.
+Also, the orientation of all the faces are wrong.
 
 If the line
 
