@@ -130,8 +130,8 @@ the order of output files is unexpected.
 | :---: | :---: | :---:|
 | +X | +Z| flipped horizontally |
 | -X | -Z| flipped horizontally |
-| +Y | +Y| flipped vertically & rotated 90 deg anti-clockwise |
-| -Y | -Y| flipped vertically & rotated 90 deg clockwise |
+| +Y | +Y| rotated 90 deg clockwise & flipped horizontally  |
+| -Y | -Y| rotated 90 deg anti-clockwise  & flipped horizontally |
 | +Z | +X| flipped horizontally |
 | -Z | -X| flipped horizontally |
 
