@@ -1,4 +1,4 @@
-This project consists of 3 Demos involving the setting up of a cubic environment map.
+This project consists of 4 Demos involving the setting up of a cubic environment map.
 
 <br />
 <br />
@@ -6,17 +6,19 @@ This project consists of 3 Demos involving the setting up of a cubic environment
 
 **Demo 1: Cubemapping.** 
 
-It applies the concept of layer rendering in Metal to create a cube texture which will be displayed as a background environment map.
+It applies the concept of layer rendering in Metal to create a cubemap texture which will be displayed as a background environment map besides texturing a skybox.
 
-Metal applications have 2 other ways of creating a cube map texture. One method is to instantiate six instances of 2D MTLTexture from 6 graphic images. The MTLTextureDescriptor class function is then called
+Metal applications have 2 other ways of creating a cubemap texture. One method is to instantiate six instances of 2D *MTLTexture* from 6 graphic images. The *MTLTextureDescriptor* class function is then called
+
+<br />
 
 ```swift
         textureCubeDescriptor(pixelFormat:, size:, mipmapped:)
 ```
-to create a 3D cube MTLTexture. The pixels of the six 2D MTLTextures are copied to 6 slices of the 3D cube MTLTexture.
+to create a cubemap texture. The pixels of the six 2D *MTLTextures* are copied to 6 slices of the cubetexture of type *MTLTextureTypeCube*.
 
 
-Another method is to call the MTLTextureLoader function:
+Another method is to call the *MTLTextureLoader* function:
 
 ```swift
 	newTexture(name:, scaleFactor:, bundle:, options:)
@@ -24,35 +26,36 @@ Another method is to call the MTLTextureLoader function:
 
 to load the 6 images to instantiate the cubemap texture. These 6 images are placed in a cubetexture set within the application's Assets.xcassets folder.
 
-(See Apple's "LODwithFunctionSpecialization" or "Deferred Lighting" demo.)
+(See Apple's *LODwithFunctionSpecialization* or *Deferred Lighting* demo.)
 
-Once the cubemap texture is created, it can be applied to a skybox or used to texture the 6 faces of a box.
+Once the cubemap texture is created, it can be used to texture the 6 faces of a skybox.
 
 This demo will also perform a simulation of a reflection of the environment. 
 
 
-Details on creating a cube map using layer rendering in Metal
+*Details on creating a cube map using layer rendering in Metal*
+
 The cubemap texture is created using the following procedure:
 
-a) Six square graphic images are loaded and instantiated as NSImage objects. An array of 6 CGImages are created from these NSImage instances.
+a) Six square graphic images are loaded and instantiated as *NSImage* objects. An array of 6 *CGImages* are created from these *NSImage* instances.
 
-b) They are converted into instances of MTLTextures (type2D) using the MTKTextureLoader function
+b) They are converted into instances of *MTLTextures* (type2D) using the *MTKTextureLoader* function
 
 ```swift
 	newTexture(cgImage:, options:)
 ```
 
-c) The MTLRenderPassDescriptor and MTLRenderPipelineDescriptor objects of an offscreen renderer are setup. To apply the idea of layer rendering in Metal, the renderTargetArrayLength property of the MTLRenderPassDescriptor object is set to 6. Any value more than 0 will enable layer rendering. The inputPrimitiveTopology property of the MTLRenderPipelineDescriptor object must be set to "MTLPrimitiveTopologyClass.triangle" since layered rendering is enabled.
+c) The *MTLRenderPassDescriptor* and *MTLRenderPipelineDescriptor* objects of an offscreen renderer are setup. To apply the idea of layer rendering in Metal, the *renderTargetArrayLength* property of the *MTLRenderPassDescriptor* object is set to 6. Any value more than 0 will enable layer rendering. The *inputPrimitiveTopology* property of the *MTLRenderPipelineDescriptor* object must be set to *MTLPrimitiveTopologyClass.triangle* since layered rendering is enabled.
 
-d) The 6 slices of the cube map are then rendered during a render pass using a MTLRenderCommandEncoder object. Refer to the function "createCubemapTexture".
+d) The 6 slices of the cubemap are then rendered during a render pass using a *MTLRenderCommandEncoder object*. Refer to the function *createCubemapTexture*.
 
 
 For best performance during rendering to screen, the cubemap texture should be created before entering the main display loop.
 
 
-Once the cubemap texture is created, a second MTLRenderCommandEncoder object uses it to draw a skybox.
+Once the cubemap texture is created, a second *MTLRenderCommandEncoder* object uses it to draw a skybox.
 
-A third MTLRenderCommandEncoder object uses the cubemap texture to simulate a reflection of the environment as displayed by the skybox.
+A third *MTLRenderCommandEncoder* object uses the cubemap texture to simulate a reflection of the environment as displayed by the skybox.
 
 Both the second and third render passes are executed within the main display loop.
 
@@ -62,16 +65,16 @@ Both the second and third render passes are executed within the main display loo
 
 **Demo 2: Convert six 2D Cubic environment maps to an EquiRectangular map.**
 
-This demo loads and instantiates a MTLTexture of type MTLTextureTypeCube from 6 .HDR files located in the "Images" folder of this project. Two sets of .HDR files are provided; the sets have been converted from the files equirectImage.hdr and newport_loft.hdr.
+This demo loads and instantiates a MTLTexture of type *MTLTextureTypeCube* from 6 .HDR files located in the "Images" folder of this project. Two sets of .HDR files are provided; the sets were converted from the files *equirectImage.hdr* and *newport_loft.hdr*.
 
 An offscreen renderer is called to convert the six 2D Cubic environment maps to a 1:1 EquiRectangular projection (aka Spherical Projection) map.
 
 Finally, within the main rendering loop, the generated EquiRectangular map is displayed as 2:1 rectangular image. We have to scale the geometry (a 4:2 quad) to fit Metal's [2,2,1] NDC (normalised device coordinates) box.
 
 
-The texture output by the fragment function "outputEquiRectangularTexture" can be saved to disk by pressing an "s"/"S" key. To output the 1:1 EquiRectangular map as a 2:1 graphic, an Affine transformation is performed on the generated 1:1 graphic.
+The texture output by the fragment function *outputEquiRectangularTexture* can be saved to disk by pressing an "s"/"S" key. To output the 1:1 EquiRectangular map as a 2:1 graphic, an Affine transformation is performed on the generated 1:1 graphic.
 
-Note: the previous iteration of this demo uses a special function to load hdr. The EquiRectangular map was saved in HEIC format. Currently, the demo using 2 C functions viz. stbi_loadf() and stbi_write_hdr from the stb_image (header) library to load and save the hdr images.
+Note: the previous iteration of this demo uses a special function to load the *.hdr* image file. The EquiRectangular map was saved in HEIC format. Currently, the demo using 2 C functions viz. *stbi_loadf()* and *stbi_write_hdr* from the stb_image (header) library to load and save the .HDR images.
 
 <br />
 <br />
@@ -79,9 +82,9 @@ Note: the previous iteration of this demo uses a special function to load hdr. T
 
 **Demo 3: Convert an EquiRectangular image to six 2D images.**
 
-This demo converts an EquiRectangular image (2:1) to six 2D images by rendering to an off-screen cube texture (MTLTextureTypeCube)
+This demo converts an EquiRectangular image (2:1) to six 2D images by rendering to an off-screen cubemap texture (with the type *MTLTextureTypeCube*)
 
-Once the view is displayed, the user may save the six 2D images generated by this Metal application to disk by pressing "s" or "S". He/she can visually compare the six 2D images (.hdr) with those within the "Images" folder of this project. The images within this folder were obtained by running the WebGL program at the link:
+Once the view is displayed, the user may save the six 2D images generated by this Metal application to disk by pressing "s" or "S". He/she can visually compare the six 2D images (.HDR) with those within the *Images* folder of this project. The images within this folder were obtained by running the WebGL program at the link:
 
  https://matheowis.github.io/HDRI-to-CubeMap/
 
@@ -187,9 +190,9 @@ The Metal fragment shader function of this demo is a port of the above OpenGL fr
 
 Instead of using the Right-Hand rule to instantiate the cubemap texture, the Left-Hand Rule is applied.
 
-Notice that the fragment shader function sampleSphericalMap_LH is much simpler. The parameter faceIndex is not used at all. The output is identical to Demo 3.
+Notice that the fragment shader function *sampleSphericalMap_LH* is much simpler. The parameter *faceIndex* is not used at all. The output is identical to Demo 3.
 
-Also we don't have to flip the 2D textures horizontally. (cf. CubeLookupShader fragment function.
+Also we don't have to flip the 2D textures horizontally. (cf. *CubeLookupShader* fragment function.
 
 
 
