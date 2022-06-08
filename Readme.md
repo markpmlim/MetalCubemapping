@@ -1,7 +1,9 @@
 This project consists of 3 Demos involving the setting up of a cubic environment map.
+
 <br />
 <br />
 <br />
+
 **Demo 1: Cubemapping.** 
 
 It applies the concept of layer rendering in Metal to create a cube texture which will be displayed as a background environment map.
@@ -53,9 +55,11 @@ Once the cubemap texture is created, a second MTLRenderCommandEncoder object use
 A third MTLRenderCommandEncoder object uses the cubemap texture to simulate a reflection of the environment as displayed by the skybox.
 
 Both the second and third render passes are executed within the main display loop.
+
 <br />
 <br />
 <br />
+
 **Demo 2: Convert six 2D Cubic environment maps to an EquiRectangular map.**
 
 This demo loads and instantiates a MTLTexture of type MTLTextureTypeCube from 6 .HDR files located in the "Images" folder of this project. Two sets of .HDR files are provided; the sets have been converted from the files equirectImage.hdr and newport_loft.hdr.
@@ -67,10 +71,12 @@ Finally, within the main rendering loop, the generated EquiRectangular map is di
 
 The texture output by the fragment function "outputEquiRectangularTexture" can be saved to disk by pressing an "s"/"S" key. To output the 1:1 EquiRectangular map as a 2:1 graphic, an Affine transformation is performed on the generated 1:1 graphic.
 
-Note: the previous iteration of this demo uses a special function to load hdr. The EquiRectangular map was saved in HEIC format. Currently, the demo using 2 C functions viz. stbi_loadf() and stbi_write_hdr from the stb_image library to load and save the hdr images.
+Note: the previous iteration of this demo uses a special function to load hdr. The EquiRectangular map was saved in HEIC format. Currently, the demo using 2 C functions viz. stbi_loadf() and stbi_write_hdr from the stb_image (header) library to load and save the hdr images.
+
 <br />
 <br />
 <br />
+
 **Demo 3: Convert an EquiRectangular image to six 2D images.**
 
 This demo converts an EquiRectangular image (2:1) to six 2D images by rendering to an off-screen cube texture (MTLTextureTypeCube)
@@ -172,8 +178,20 @@ The Metal fragment shader function of this demo is a port of the above OpenGL fr
 
     }
 ```
+
 <br />
 <br />
+<br />
+
+**Demo 4: Convert an EquiRectangular image to six 2D images.**
+
+Instead of using the Right-Hand rule to instantiate the cubemap texture, the Left-Hand Rule is applied.
+
+Notice that the fragment shader function sampleSphericalMap_LH is much simpler. The parameter faceIndex is not used at all. The output is identical to Demo 3.
+
+Also we don't have to flip the 2D textures horizontally. (cf. CubeLookupShader fragment function.
+
+
 
 **Requirements:** XCode 9.x, Swift 4.x and macOS 10.13.4 or later.
 <br />
@@ -188,4 +206,7 @@ http://paulbourke.net/panorama/cubemaps/index.html
 https://metalbyexample.com
 
 https://stackoverflow.com/questions/58702023/what-is-the-coordinate-system-used-in-metal
+
+https://matheowis.github.io/HDRI-to-CubeMap/
+
 

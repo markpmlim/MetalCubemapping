@@ -65,7 +65,7 @@ class ViewController: NSViewController {
         let url = directoryURL.appendingPathComponent(name)
         // Note: the pixel format of the mtl texture is rgba16Float.
         let options: [String : Any] = [
-            String(kCIContextWorkingFormat) : NSNumber(value: kCIFormatRGBAh)
+            String(kCIContextWorkingFormat) : NSNumber(value: kCIFormatRGBA16)
         ]
         var ciImage = CIImage(mtlTexture: texture2D,
                               options: options)!

@@ -31,7 +31,7 @@ struct InstanceParams
 }
 
 
-class Renderer: NSObject, MTKViewDelegate {
+class EquiRectagularRenderer: NSObject, MTKViewDelegate {
     let device: MTLDevice
     let mtkView: MTKView
     let commandQueue: MTLCommandQueue!
@@ -79,7 +79,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                          isWriteEnabled: false)
         torusDepthStencilState = buildDepthStencilState(device: device,
                                                         isWriteEnabled: true)
-        createCubemapTexture_RH()
+        createCubemapTexture_LH()
     }
 
     deinit {
@@ -89,14 +89,11 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     func buildResources() {
-        // The front facing of the 6 faces of this cube is anti-clockwise.
-        // Used when converting the equirectangular map to six 2D cube maps
         cubeMesh = CubeMesh(device: device)
 
-        // Used to render the skybox.
         skyboxMesh = BoxMesh(withSize: 2,
                              device: device)
-
+        
         // Setup the various objects
         torusMesh = TorusMesh(ringRadius: 3.0, pipeRadius: 1.0,
                               device: device)!
@@ -107,6 +104,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                 options: .cpuCacheModeWriteCombined)
             uniformsBuffers.append(buffer!)
         }
+        // Allocate memory for an InstanceParams object.
         instanceParmsBuffer = self.device.makeBuffer(length: MemoryLayout<InstanceParams>.stride * 6,
                                                      options: .cpuCacheModeWriteCombined)
 
@@ -119,14 +117,14 @@ class Renderer: NSObject, MTKViewDelegate {
             exit(1)
         }
 
+        // Set up a cubemap texture for copy to
         let cubeMapDesc = MTLTextureDescriptor.textureCubeDescriptor(pixelFormat: mtkView.colorPixelFormat,
                                                                      size: Int(cubemapResolution),
                                                                      mipmapped: false)
         cubeMapDesc.storageMode = MTLStorageMode.managed
-        // Set up a cubemap texture to renderer to and read from.
         cubeMapDesc.usage = [MTLTextureUsage.renderTarget, MTLTextureUsage.shaderRead]
         cubeMapTexture = device.makeTexture(descriptor: cubeMapDesc)
-
+      
         let cubeMapDepthDesc = MTLTextureDescriptor.textureCubeDescriptor(pixelFormat: MTLPixelFormat.depth32Float,
                                                                           size: Int(cubemapResolution),
                                                                           mipmapped: false)
@@ -143,7 +141,6 @@ class Renderer: NSObject, MTKViewDelegate {
         renderToTexturePassDescriptor.depthAttachment.loadAction      = MTLLoadAction.clear
         renderToTexturePassDescriptor.colorAttachments[0].texture     = cubeMapTexture
         renderToTexturePassDescriptor.depthAttachment.texture         = cubeMapDepthTexture
-        // Enable layer rendering.
         renderToTexturePassDescriptor.renderTargetArrayLength         = 6
    }
 
@@ -153,7 +150,7 @@ class Renderer: NSObject, MTKViewDelegate {
         else {
             fatalError("Could not load default library from main bundle")
         }
-
+       
         // Create the render pipeline for the drawable render pass.
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.label = "Render Torus Pipeline"
@@ -172,10 +169,9 @@ class Renderer: NSObject, MTKViewDelegate {
             fatalError("Could not create torus render pipeline state object: \(error)")
         }
 
-        // Re-use the pipeline descriptor for the skybox
+        // Re-use the pipeline descriptor
         pipelineDescriptor.label = "Render Skybox Pipeline"
         pipelineDescriptor.vertexFunction = library.makeFunction(name: "SkyboxVertexShader")
-        // The fragment function is "CubeLookupShader"
         pipelineDescriptor.vertexDescriptor = skyboxMesh.vertexDescriptor
         do {
              skyboxRenderPipelineState = try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -184,17 +180,15 @@ class Renderer: NSObject, MTKViewDelegate {
              fatalError("Could not create skybox render pipeline state object: \(error)")
         }
 
-        ///////////
         // Set up pipeline for rendering to the offscreen texture.
         // Reuse the above descriptor object and change properties that differ.
         pipelineDescriptor.label = "Offscreen Render Pipeline"
         pipelineDescriptor.sampleCount = 1
         pipelineDescriptor.colorAttachments[0].pixelFormat = cubeMapTexture.pixelFormat
-        pipelineDescriptor.depthAttachmentPixelFormat =  cubeMapDepthTexture.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat =  cubeMapDepthTexture.pixelFormat   //MTLPixelFormat.invalid
         pipelineDescriptor.vertexFunction = library.makeFunction(name: "cubeMapVertexShader")
         pipelineDescriptor.fragmentFunction = library.makeFunction(name: "outputCubeMapTexture")
         pipelineDescriptor.vertexDescriptor = cubeMesh.vertexDescriptor
-        // Layer rendering has been enabled so this property must be set.
         pipelineDescriptor.inputPrimitiveTopology = MTLPrimitiveTopologyClass.triangle
 
         do {
@@ -225,56 +219,61 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     /*
-     Render using the right-hand rule to an offscreen cube map texture
-     Imagine the initial position of the camera is at the centre of the
+    Render using the left-hand rule to an offscreen cube map texture
+    Imagine the initial position of the camera is at the centre of the
      cube with its forward vector pointing in the direction of +z and
-     its up vector pointing in the direction of -y.
+     its up vector pointing in the direction of +y.
      */
-    func createCubemapTexture_RH() {
-        
-        let captureProjectionMatrix = matrix_perspective_right_hand(radians_from_degrees(90),
-                                                                    1.0,
-                                                                    0.1, 10.0)
+    func createCubemapTexture_LH() {
+
+        // Only +X and +Y faces are generated correctly.
+        // The other faces are generated correctly but the order is wrong.
+        // +X should be right, left face is generated.
+        // -X should be left, right face is generated.
+        // +Y should be top, bottom face is generated.
+        // -Y should be bottom, top face is generated.
+        let captureProjectionMatrix = matrix_perspective_left_hand(radians_from_degrees(90),
+                                                                   1.0,
+                                                                   0.1, 10.0)
         var captureViewMatrices = [float4x4]()
-        // The camera is rotated -90 degrees about the y-axis.
-        var viewMatrix = matrix_look_at_right_hand(float3( 0,  0, 0),   // eye is at the centre of the cube.
-                                                   float3( 1,  0, 0),   // centre of +X face
-                                                   float3( 0, -1, 0))   // Up
-        captureViewMatrices.append(viewMatrix)
-        
         // The camera is rotated +90 degrees about the y-axis.
-        viewMatrix = matrix_look_at_right_hand(float3( 0, 0, 0),
-                                               float3(-1, 0, 0),        // centre of -X face
-                                               float3( 0,-1, 0))
-        
+        var viewMatrix = matrix_look_at_left_hand(float3(0, 0, 0),  // eye is at the origin of the cube.
+                                                  float3(1, 0, 0),  // centre of +X face
+                                                  float3(0, 1, 0))  // Up
         captureViewMatrices.append(viewMatrix)
-        
-        // We will do it in the fragment shader "sampleSphericalMap"
+
+        // The camera is rotated -90 degrees about the y-axis.
+        viewMatrix = matrix_look_at_left_hand(float3( 0, 0, 0),
+                                              float3(-1, 0, 0),     // centre of -X face
+                                              float3( 0, 1, 0))
+
+        captureViewMatrices.append(viewMatrix)
+
         // The camera is rotated -90 degrees about the x-axis.
-        viewMatrix = matrix_look_at_right_hand(float3(0, 0, 0),
-                                               float3(0, 1, 0),         // centre of +Y face
-                                               float3(0, 0, 1))
+        viewMatrix = matrix_look_at_left_hand(float3(0, 0,  0),
+                                              float3(0, 1,  0),     // centre of +Y face
+                                              float3(0, 0, -1))
         captureViewMatrices.append(viewMatrix)
-        
-        // The camera is rotated +90 degrees about the x-axis.
-        viewMatrix = matrix_look_at_right_hand(float3(0,  0,  0),
-                                               float3(0, -1,  0),       // centre of -Y face
-                                               float3(0,  0, -1))
+
+        // We rotate the camera  is rotated +90 degrees about the x-axis.
+       viewMatrix = matrix_look_at_left_hand(float3( 0,  0, 0),
+                                             float3(0, -1, 0),     // centre of -Y face
+                                             float3(0,  0, 1))
         captureViewMatrices.append(viewMatrix)
-        
+
         // The camera is at its initial position pointing in the +z direction.
-        // The up vector of the camera is pointing in the -y direction.
-        viewMatrix = matrix_look_at_right_hand(float3(0,  0, 0),
-                                               float3(0,  0, 1),        // centre of +Z face
-                                               float3(0, -1, 0))
+        // The up vector of the camera is pointing in the +y direction.
+        viewMatrix = matrix_look_at_left_hand(float3(0, 0, 0),
+                                              float3(0, 0, 1),      // centre of +Z face
+                                              float3(0, 1, 0))
         captureViewMatrices.append(viewMatrix)
-        
-        // The camera is rotated -180 (+180) degrees about the y-axis.
-        viewMatrix = matrix_look_at_right_hand(float3(0,  0,  0),
-                                               float3(0,  0, -1),       // centre of -Z face
-                                               float3(0, -1,  0))
+
+        // The camera is rotated +180 (-180) degrees about the y-axis.
+        viewMatrix = matrix_look_at_left_hand(float3(0, 0,  0),
+                                              float3(0, 0, -1),     // centre of -Z face
+                                              float3(0, 1,  0))
         captureViewMatrices.append(viewMatrix)
-        
+
         let bufferPointer = instanceParmsBuffer.contents()
         var viewProjectionMatrix = matrix_float4x4()
         for i in 0..<captureViewMatrices.count {
@@ -284,9 +283,9 @@ class Renderer: NSObject, MTKViewDelegate {
                    &viewProjectionMatrix,
                    MemoryLayout<InstanceParams>.stride)
         }
-        
+
         let commandBuffer = commandQueue.makeCommandBuffer()!
-        commandBuffer.label = "Offscreen capture"
+        commandBuffer.label = "Capture"
         commandBuffer.addCompletedHandler {
             cb in
             if commandBuffer.status == .completed {
@@ -302,12 +301,12 @@ class Renderer: NSObject, MTKViewDelegate {
                 }
             }
         }
-        
+        // Create a new render command encoder for each face of the cube texture.
         let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderToTexturePassDescriptor)!
         commandEncoder.label = "Offscreen Render Pass"
         commandEncoder.setRenderPipelineState(renderToTextureRenderPipelineState)
-        //commandEncoder.setFrontFacing(.counterClockwise)
-        //commandEncoder.setCullMode(.back)
+        commandEncoder.setFrontFacing(.clockwise)
+        commandEncoder.setCullMode(.back)
         let viewPort = MTLViewport(originX: 0, originY: 0,
                                    width: Double(cubemapResolution), height: Double(cubemapResolution),
                                    znear: 0, zfar: 1)
@@ -315,7 +314,7 @@ class Renderer: NSObject, MTKViewDelegate {
         commandEncoder.setVertexBuffer(cubeMesh.vertexBuffer,
                                        offset: cubeMesh.vertexBufferOffset,
                                        index: 0)
-        
+
         // Write the output of the fragment function "cubeMapVertexShader"
         // to the correct slice of the cubemap texture object.
         commandEncoder.setVertexBuffer(instanceParmsBuffer,
@@ -323,7 +322,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                        index: 2)
         commandEncoder.setFragmentTexture(hdrTexture,
                                           index: 0)
-        // Draw the cube 6 times.
+        // Draw the cube.
         commandEncoder.drawIndexedPrimitives(type: cubeMesh.primitiveType,
                                              indexCount: cubeMesh.indexCount,
                                              indexType: cubeMesh.indexType,
@@ -339,25 +338,24 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
 
-
     func updateUniforms() {
         time += 1 / Float(mtkView.preferredFramesPerSecond)
         let angle = -time
         // The camera distance needs to be adjusted.
-        let cameraDistance: Float = 10.0
+        let cameraDistance: Float = -10.0
         // Use a rotating camera.
         let worldCameraPosition = float4(cameraDistance * cos(angle),
                                          1.0,
                                          cameraDistance * sin(angle),
                                          1.0)
         // Setup a view matrix
-        viewMatrix = matrix_look_at_right_hand(worldCameraPosition[0], worldCameraPosition[1], worldCameraPosition[2],
+        viewMatrix = matrix_look_at_left_hand(worldCameraPosition[0], worldCameraPosition[1], worldCameraPosition[2],
                                               0, 0, 0,
                                               0, 1, 0)
 
         let skyboxModelMatrix = matrix_identity_float4x4
         let skyboxViewMatrix = matrix4x4_rotation(angle,
-                                                  vector_float3(0, 1, 0))
+                                                  vector_float3(0, -1, 0))
         let skyboxNormalMatrix = skyboxModelMatrix.inverse.transpose    // unused
 
         var skyboxUniforms = Uniforms(projectionMatrix: projectionMatrix,
@@ -384,15 +382,15 @@ class Renderer: NSObject, MTKViewDelegate {
                &torusUniforms,
                kAlignedUniformsSize)
     }
-
+    
     // Called whenever the view size changes
     func mtkView(_ view: MTKView,
                  drawableSizeWillChange size: CGSize) {
         buildDepthBuffer()
         let aspectRatio = Float(view.drawableSize.width / view.drawableSize.height)
-        projectionMatrix = matrix_perspective_right_hand(Float.pi / 3,
-                                                         aspectRatio,
-                                                         0.1, 1000)
+        projectionMatrix = matrix_perspective_left_hand(Float.pi / 3,
+                                                        aspectRatio,
+                                                        0.1, 1000)
     }
 
     // called per frame update
@@ -402,7 +400,8 @@ class Renderer: NSObject, MTKViewDelegate {
         if  let renderPassDescriptor = view.currentRenderPassDescriptor,
             let drawable = view.currentDrawable {
             let drawableSize = drawable.layer.drawableSize
-            if (drawableSize.width != CGFloat(depthTexture.width) || drawableSize.height != CGFloat(depthTexture.height)) {
+            if (drawableSize.width != CGFloat(depthTexture.width) ||
+                drawableSize.height != CGFloat(depthTexture.height)) {
                 buildDepthBuffer()
             }
             _ = frameSemaphore.wait(timeout: DispatchTime.distantFuture)
@@ -412,16 +411,15 @@ class Renderer: NSObject, MTKViewDelegate {
             renderPassDescriptor.colorAttachments[0].loadAction = .clear
             renderPassDescriptor.colorAttachments[0].storeAction = .store
             renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(1, 1, 1, 1)
-            
+
             renderPassDescriptor.depthAttachment.texture = self.depthTexture
             renderPassDescriptor.depthAttachment.loadAction = .clear
             renderPassDescriptor.depthAttachment.storeAction = .dontCare
             renderPassDescriptor.depthAttachment.clearDepth = 1
             let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
-            renderEncoder.setFrontFacing(.counterClockwise)
+            renderEncoder.setFrontFacing(.clockwise)
             renderEncoder.setCullMode(.back)
 
-            // Render the background environment map.
             renderEncoder.setRenderPipelineState(skyboxRenderPipelineState)
             renderEncoder.setDepthStencilState(skyboxDepthStencilState)
             renderEncoder.setVertexBuffer(skyboxMesh.vertexBuffer,
@@ -441,7 +439,6 @@ class Renderer: NSObject, MTKViewDelegate {
                                                 indexBuffer: skyboxMesh.indexBuffer,
                                                 indexBufferOffset: skyboxMesh.indexBufferOffset)
 
-            // Render the torus
             renderEncoder.setRenderPipelineState(torusRenderPipelineState)
             renderEncoder.setDepthStencilState(torusDepthStencilState)
  
@@ -471,13 +468,13 @@ class Renderer: NSObject, MTKViewDelegate {
                 if let strongSelf = self {
                     strongSelf.frameSemaphore.signal()
                     /*
-                     value of status        name
-                            0           notEnqueued
-                            1           enqueued
-                            2           committed
-                            3           scheduled
-                            4           completed
-                            5           error
+                     value of status    name
+                        0               notEnqueued
+                        1               enqueued
+                        2               committed
+                        3               scheduled
+                        4               completed
+                        5               error
                      */
                     if commandBuffer.status == .error {
                         print("Command Buffer Status Error")
@@ -492,3 +489,4 @@ class Renderer: NSObject, MTKViewDelegate {
         currentFrameIndex = (currentFrameIndex + 1) % kMaxInFlightFrameCount
     }
 }
+

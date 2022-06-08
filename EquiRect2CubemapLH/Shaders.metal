@@ -1,11 +1,10 @@
 //
 //  Shaders.metal
-//  EquitRect2CubemapRH
+//  EquiRect2CubemapLH
 //
-//  Created by Mark Lim Pak Mun on 11/10/2020.
-//  Copyright © 2020 Mark Lim Pak Mun. All rights reserved.
+//  Created by Mark Lim Pak Mun on 07/06/2022.
+//  Copyright © 2022 Mark Lim Pak Mun. All rights reserved.
 //
-// KIV. Instead of rendering a cube 6 times, could we render a face at a time?
 
 #include <metal_stdlib>
 using namespace metal;
@@ -17,8 +16,7 @@ struct VertexIn {
     float2 texCoords [[attribute(2)]];  // unused
 };
 
-struct VertexOut
-{
+struct VertexOut {
     float4 position [[position]];   // clip space
     float4 texCoords;               // float4 instead of float3
 };
@@ -66,10 +64,10 @@ float3 linear_from_srgb(float3 rgb)
 }
 
 vertex MappingVertex
-cubeMapVertexShader(CubeVertex                  vertexIn        [[stage_in]],
-                    unsigned int                instanceId      [[instance_id]],
-                    constant Uniforms           &uniforms       [[buffer(1)]],
-                    const device InstanceParams *instanceParms  [[buffer(2)]])
+cubeMapVertexShader(CubeVertex              vertexIn        [[stage_in]],
+                    unsigned int            instanceId      [[instance_id]],
+                    constant Uniforms       &uniforms       [[buffer(1)]],
+                    device InstanceParams *instanceParms    [[buffer(2)]])
 {
     float4 position = vertexIn.position;
 
@@ -85,43 +83,27 @@ cubeMapVertexShader(CubeVertex                  vertexIn        [[stage_in]],
     return outVert;
 }
 
-constant float2 invAtan = float2(0.15915, 0.31831);   // 1/2π, 1/π
+
+// Left-hand - this function is based on a DirectX Pixel Shader.
 // Helper function
+constant float2 invAtan = float2(1/(2*M_PI_F), 1/M_PI_F);   // float2(1/2π, 1/π);
 
-/*
- The 3D coodinate system in Metal is different from that of OpenGL.
-    + x-axis: horizontally right
-    + y-axis: vertically up
-    + z-axis: perpendicularly into the screen
-    
-  The 2D Texture coodinate system in Metal is also different from that of OpenGL.
-    origin: top left hand corner
-    s-axis: horizontally from left to the right
-    t-axis: vertically from top to bottom
- */
-float2 sampleSphericalMap(float3 direction, uint faceIndex)
+// Working as expected. faceIndex no longer required.
+float2 sampleSphericalMap_LH(float3 direction, uint faceIndex)
 {
-    float2 uv;
     // Original code:
-    // tan(θ) = dir.z/dir.x and sin(φ) = dir.y/1.0
-    if (faceIndex == 2 || faceIndex == 3)
-    {   // top, bottom
-        uv = float2(atan2(direction.x, -direction.z),
-                    -asin(direction.y));
-    }
-    else
-    {
-        // left, right, front, back.
-        uv = float2(atan2(direction.x, direction.z),
-                    asin(direction.y));
+    //      tan(θ) = dir.z/dir.x and sin(φ) = dir.y/1.0
+    float2 uv = float2(atan2(direction.x, direction.z),
+                       asin(-direction.y));
 
-    }
-    // The range of uv.x: [ -π,   π ] --> [-0.5, 0.5]
-    // The range of uv.y: [-π/2, π/2] --> [-0.5, 0.5]
+    // The range of u: [ -π,   π ] --> [-0.5, 0.5]
+    // The range of v: [-π/2, π/2] --> [-0.5, 0.5]
     uv *= invAtan;
-    uv += 0.5;          // [0, 1] for both uv.x & uv.y
+    uv += 0.5;          // [0, 1] for both u & v
+
     return uv;
 }
+
 
 // Render to an offscreen texture object in this case a 2D texture.
 fragment half4
@@ -134,28 +116,25 @@ outputCubeMapTexture(MappingVertex      mappingVertex   [[stage_in]],
                                  mag_filter::linear,
                                  min_filter::linear);
 
+    // Magnitude of direction is 1.0 upon normalization.
     float3 direction = normalize(mappingVertex.worldPosition.xyz);
     uint faceIndex = mappingVertex.whichLayer;
-    float2 uv = sampleSphericalMap(direction, faceIndex);
+    // The paramter faceIndex is not used.
+    float2 uv = sampleSphericalMap_LH(direction, faceIndex);
     half4 color = equirectangularMap.sample(mapSampler, uv);
-/*
-    float3 srgbColor = float3(color.rgb);
-    srgbColor = linear_from_srgb(srgbColor);
-    return half4(srgbColor.r, srgbColor.g, srgbColor.b, 1.0);
-*/
+
     return color;
 }
 
 ///////
 
 // Draw the skybox
-// The fragment function is "CubeLookupShader"
 vertex VertexOut
 SkyboxVertexShader(VertexIn vertexIn             [[stage_in]],
                    constant Uniforms &uniforms   [[buffer(1)]])
 {
     float4 position = float4(vertexIn.position, 1.0);
-
+    
     VertexOut outVert;
     // Transform vertex's position into clip space.
     outVert.position = uniforms.projectionMatrix * uniforms.viewMatrix * uniforms.modelMatrix * position;
@@ -164,7 +143,7 @@ SkyboxVertexShader(VertexIn vertexIn             [[stage_in]],
     return outVert;
 }
 
-// The uniforms parameter is declared but is not used.
+// The Uniforms are not used but to be declared.
 fragment float4
 CubeLookupShader(VertexOut fragmentIn               [[stage_in]],
                  texturecube<float> cubemapTexture  [[texture(0)]],
@@ -173,14 +152,11 @@ CubeLookupShader(VertexOut fragmentIn               [[stage_in]],
     constexpr sampler cubeSampler(mip_filter::linear,
                                   mag_filter::linear,
                                   min_filter::linear);
-    // The 3D coordinate system of the cube map is left-handed as viewed from the inside of the cube.
-    // So we must add a '-' to z-coord if the skybox is projected with the right-hand rule.
-    // We have set Front Facing to be anti-clockwise.
-    float3 texCoords = float3(fragmentIn.texCoords.x, fragmentIn.texCoords.y, -fragmentIn.texCoords.z);
+    // Don't have to flip horizontally anymore.
+    float3 texCoords = float3(fragmentIn.texCoords.x, fragmentIn.texCoords.y, fragmentIn.texCoords.z);
     return cubemapTexture.sample(cubeSampler, texCoords);
 }
 
-// The fragment function is "CubeLookupShader"
 vertex VertexOut
 ReflectionVertexShader(VertexIn vertexIn            [[stage_in]],
                        constant Uniforms &uniforms  [[buffer(1)]])

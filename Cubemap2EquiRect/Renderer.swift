@@ -1,5 +1,5 @@
 /*
- The 6 images are correctly produced using the link at:
+ The 6 images are correctly produced using online program at the link:
     https://matheowis.github.io/HDRI-to-CubeMap/
  Previously the images were rendered and saved by tweaking an OpenGL
  program written by Joey de Vries.
