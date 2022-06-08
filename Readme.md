@@ -6,7 +6,7 @@ This project consists of 4 Demos involving the setting up of a cubic environment
 
 **Demo 1: Cubemapping.** 
 
-It applies the concept of layer rendering in Metal to create a cubemap texture which will be displayed as a background environment map besides texturing a skybox.
+It applies the concept of layer rendering in Metal to create a cubemap texture which will be used as a background environment map besides texturing a skybox.
 
 Metal applications have 2 other ways of creating a cubemap texture. One method is to instantiate six instances of *MTLTexture* of type *MTLTextureType2D* from 6 graphic images. The *MTLTextureDescriptor* class function is then called
 
@@ -161,10 +161,10 @@ is changed to
                    asin(v.y));
 ```
 
-the six faces are generated in the correct order and orientation. This discrepancy could be due to the implementation in OpenGL drivers in macOS. 
+the six faces are generated in the correct order and orientation. This discrepancy could be due to the implementation in *OpenGL* drivers in macOS. 
 
 
-The Metal fragment shader function of this demo is a port of the above OpenGL fragment shader program with some modifications. Because the 2D texture coordinate systems in Metal and OpenGL are different, the line of code listed above have to be written as:
+The Metal fragment shader function of this demo is a port of the above *OpenGL* fragment shader with some modifications. Because the 2D texture coordinate systems in Metal and OpenGL are different, the line of code listed above have to be written as:
 
 ```cpp
     float2 uv;
