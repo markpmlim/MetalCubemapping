@@ -125,18 +125,16 @@ outputEquiRectangularTexture(TextureMappingVertex  mappingVertex [[stage_in]],
 }
 
 /*
- The dimensions of the quad passed is 4:2 units.
+ The dimensions of the quad passed is 1:1.
  */
 vertex TextureMappingVertex
-simpleVertexShader(unsigned int                 vertex_id       [[ vertex_id ]],
-                   const device EquiRectVertex *vertices        [[ buffer(0) ]],
-                   constant float2x2            &scaleMatrix    [[buffer(1)]])
+simpleVertexShader(unsigned int                 vertex_id   [[ vertex_id ]],
+                   const device EquiRectVertex *vertices    [[ buffer(0) ]])
 {
     float2 position = vertices[vertex_id].position;
     TextureMappingVertex vert;
-    // Scale the quad to 1:1 so that the entire 2D view is filled with
-    // pixels from the texture. The 2D view is [-1, 1] x [-1, 1]
-    vert.renderedCoordinate = float4(scaleMatrix * position, 0.0, 1.0);
+
+    vert.renderedCoordinate = float4(position, 0.0, 1.0);
     vert.textureCoordinate = vertices[vertex_id].texCoord;
     return vert;
 }

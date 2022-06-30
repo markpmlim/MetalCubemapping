@@ -54,34 +54,35 @@ class ViewController: NSViewController {
         return cgImage
     }
 
-    func writeTexture(_ texture2D: MTLTexture,
+    func writeTexture(_ mtlTexture: MTLTexture,
                       with fileName: String,
                       at directoryURL: URL) {
         let name = fileName + ".hdr"
-        let pixelFormat = texture2D.pixelFormat
+        let pixelFormat = mtlTexture.pixelFormat
         if (pixelFormat != .rgba16Float) {
             Swift.print("Wrong pixel format: can't save this file")
         }
         let url = directoryURL.appendingPathComponent(name)
         // Note: the pixel format of the mtl texture is rgba16Float.
+        // The default for GPU rendering is kCIFormatRGBAf
         let options: [String : Any] = [
-            String(kCIContextWorkingFormat) : NSNumber(value: kCIFormatRGBA16)
+            String(kCIContextWorkingFormat) : NSNumber(value: kCIFormatRGBAh)
         ]
-        var ciImage = CIImage(mtlTexture: texture2D,
+        var ciImage = CIImage(mtlTexture: mtlTexture,
                               options: options)!
         // We need to flip the image vertically and convert its
         //  the resolution of its dimensions from 1:1 to 2:1.
         var transform = CGAffineTransform(translationX: 0.0,
                                           y: ciImage.extent.height)
-        transform = transform.scaledBy(x: 2.0, y: -1.0)
+        transform = transform.scaledBy(x: 1.0, y: -1.0)
         ciImage = ciImage.transformed(by: transform)
 
         let cgImage = createCGImage(from: ciImage)
 
-        var error: NSError?
+        var error: NSError? = nil
         let ok = writeCGImage(cgImage!, url, &error)
         if !ok {
-            Swift.print(error)
+            Swift.print(error! as NSError)
         }
     }
 

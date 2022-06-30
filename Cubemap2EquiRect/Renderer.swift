@@ -24,7 +24,10 @@ class Renderer : NSObject, MTKViewDelegate {
     var cubeMapTexture: MTLTexture!
     var offScreenRenderPassDescriptor: MTLRenderPassDescriptor!
     var equiRectangularTexture: MTLTexture!
-    var equiRectMapWidth: Int = 0
+    // Set the dimensions of the texture to be generated.
+    var equiRectMapWidth: Int = 1024
+    var equiRectMapHeight: Int = 512
+
     // size = 24 bytes; alignment=16; stride=32
     struct CubeVertex {
         let position: float4    // 16 bytes
@@ -64,8 +67,9 @@ class Renderer : NSObject, MTKViewDelegate {
     func buildResources() {
         // The following images cannot be stored in an Asset.xcassets because their filetype is hdr.
         // These can obtained by running an OpenGL program and their bitmaps written out
-        // in RGBE format. Currently macOS (10.15) does not support writing HDR files natively.
+        //  in RGBE format. Currently macOS (10.15) does not support writing HDR files natively.
         //let names = ["image00.hdr", "image01.hdr", "image02.hdr", "image03.hdr", "image04.hdr", "image05.hdr"]
+        // Filenames stored in the Resources folder of a macOS application are case-sensitive.
         let names = ["px.hdr", "nx.hdr", "py.hdr", "ny.hdr", "pz.hdr", "nz.hdr"]
         var faceTextures = [MTLTexture]()
         let textureLoader = MTKTextureLoader(device: self.device)
@@ -84,7 +88,6 @@ class Renderer : NSObject, MTKViewDelegate {
         // We expect the cube's width, height and length of equal.
         let imageWidth = faceTextures[0].width
         let imageHeight = faceTextures[0].height
-        equiRectMapWidth = imageWidth
         let textureDescriptor = MTLTextureDescriptor.textureCubeDescriptor(pixelFormat: .rgba16Float,
                                                                             size: imageWidth,
                                                                             mipmapped: false)
@@ -112,16 +115,16 @@ class Renderer : NSObject, MTKViewDelegate {
         }
 
         // The offscreen generated texture will be displayed using this geometry.
-        // The ratio of the width to height of the quad = 2:1.
+        // The ratio of the width to height of the quad = 1:1.
         // The rectangle rendered must fit the currenDrawable's size.
         // The idea is no matter how the user may resize the window,
         // its contents will fill the entire view.
         let quadVertices: [QuadVertex] = [
             //              Positions                        TexCoords
-            QuadVertex(position: float2(-2.0, -1.0), texCoord: float2(0.0, 1.0)),
-            QuadVertex(position: float2(-2.0,  1.0), texCoord: float2(0.0, 0.0)),
-            QuadVertex(position: float2( 2.0, -1.0), texCoord: float2(1.0, 1.0)),
-            QuadVertex(position: float2( 2.0,  1.0), texCoord: float2(1.0, 0.0))
+            QuadVertex(position: float2(-1.0, -1.0), texCoord: float2(0.0, 1.0)),
+            QuadVertex(position: float2(-1.0,  1.0), texCoord: float2(0.0, 0.0)),
+            QuadVertex(position: float2( 1.0, -1.0), texCoord: float2(1.0, 1.0)),
+            QuadVertex(position: float2( 1.0,  1.0), texCoord: float2(1.0, 0.0))
         ]
         quadBuffer = device.makeBuffer(bytes: quadVertices,
                                        length: MemoryLayout<QuadVertex>.stride * quadVertices.count,
@@ -183,8 +186,9 @@ class Renderer : NSObject, MTKViewDelegate {
             Swift.print("Failed to created offscreen pipeline state - error:", error)
         }
 
+        // Bug resolved: the dimensions of the generated texture is 2:1
         let texDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: view.colorPixelFormat,
-                                                                     width: equiRectMapWidth, height: equiRectMapWidth,
+                                                                     width: equiRectMapWidth, height: equiRectMapHeight,
                                                                      mipmapped: false)
         // Set up a texture for rendering to and sampling from.
         texDescriptor.usage = [MTLTextureUsage.renderTarget, MTLTextureUsage.shaderRead];
@@ -220,8 +224,9 @@ class Renderer : NSObject, MTKViewDelegate {
             let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: offScreenRenderPassDescriptor)!
             commandEncoder.label = "Offscreen Render Pass"
             commandEncoder.setRenderPipelineState(offscreenPipelineState)
+            // Set the dimensions of the view port to equiRectMapWidth:equiRectMapHeight which is 2:1
             let viewPort = MTLViewport(originX: 0, originY: 0,
-                                       width: Double(equiRectMapWidth), height: Double(equiRectMapWidth),
+                                       width: Double(equiRectMapWidth), height: Double(equiRectMapHeight),
                                        znear: 0, zfar: 1)
             commandEncoder.setViewport(viewPort)
             commandEncoder.setFragmentTexture(cubeMapTexture,
@@ -254,17 +259,10 @@ class Renderer : NSObject, MTKViewDelegate {
             let renderQuadEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
             renderQuadEncoder.setRenderPipelineState(quadPipelineState)
             renderQuadEncoder.setFrontFacing(.clockwise)
-            // Note: the geometry is a 2:1 quad.
+            // Note: the geometry is a 1:1 quad.
             renderQuadEncoder.setVertexBuffer(quadBuffer,
                                               offset: 0,
                                               index: 0)
-            // The scaling matrix when applied to this 2:1 quad will
-            //  transform it into a 1:1 quad.
-            var scalingMatrix = float2x2(columns: (float2(0.5,0), float2(0,1)))
-            renderQuadEncoder.setVertexBytes(&scalingMatrix,
-                                             length: MemoryLayout<float2x2>.stride,
-                                             index: 1)
- 
             renderQuadEncoder.setFragmentTexture(equiRectangularTexture,
                                                  index: 0)
             renderQuadEncoder.drawPrimitives(type: .triangleStrip,
