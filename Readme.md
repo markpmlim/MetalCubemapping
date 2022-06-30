@@ -190,9 +190,9 @@ The Metal fragment shader function of this demo is a port of the above OpenGL fr
 
 Instead of using the Right-Hand rule to instantiate the cubemap texture, the Left-Hand Rule is applied.
 
-Notice that the fragment shader function sampleSphericalMap_LH is much simpler. The parameter faceIndex is not used at all. The output is identical to Demo 3.
+Notice that the fragment shader function *sampleSphericalMap_LH* is much simpler. The parameter *faceIndex* is not used at all. The output is identical to Demo 3.
 
-Also we don't have to flip the 2D textures horizontally. (cf. *CubeLookupShader* fragment function.
+Also we don't have to flip the 2D textures horizontally. (cf. *CubeLookupShader* fragment function).
 
 
 
