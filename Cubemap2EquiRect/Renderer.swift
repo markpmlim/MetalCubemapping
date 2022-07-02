@@ -169,7 +169,7 @@ class Renderer : NSObject, MTKViewDelegate {
             Swift.print("Failed to created quad pipeline state - error:", error)
         }
         ///
-        // Need another pipeline state to render the 1:1 equirectangular map.
+        // Need another pipeline state to render the 1:1 quad.
         let equiRectVertexProgram = library.makeFunction(name: "projectTexture")
         // Load the fragment program into the library
         let equiRectFragmentProgram = library.makeFunction(name: "outputEquiRectangularTexture")
@@ -201,7 +201,7 @@ class Renderer : NSObject, MTKViewDelegate {
         offScreenRenderPassDescriptor.colorAttachments[0].storeAction = MTLStoreAction.store;
     }
 
-    // Generate a 2D texture whose dimensions are 1:1.
+    // Generate a 2D texture whose dimensions are 2:1.
     func createEquiRectangularTexture() {
         if let commandBuffer = commandQueue.makeCommandBuffer() {
             commandBuffer.addCompletedHandler {
