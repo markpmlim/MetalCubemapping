@@ -96,7 +96,7 @@ float3 srgb_from_linear(float3 rgb) {
 // Renders to a quad of dimensions 2x2 square units.
 // The ranges for the x- and y-coords are [-1, 1]
 // x = cos(φ)cos(θ), y = sin(φ), z = cos(φ)sin(θ)
-// Note: the resolution of the output image has the dimensions of a square
+// Note: the resolution of the input quad has the dimensions of a square
 //  and the resolution of equirectangular maps are 2:1.
 // The output of this fragment shader is to a 1:1 quad
 fragment half4
