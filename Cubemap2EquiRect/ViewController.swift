@@ -70,8 +70,7 @@ class ViewController: NSViewController {
         ]
         var ciImage = CIImage(mtlTexture: mtlTexture,
                               options: options)!
-        // We need to flip the image vertically and convert its
-        //  the resolution of its dimensions from 1:1 to 2:1.
+        // We need to flip the image vertically
         var transform = CGAffineTransform(translationX: 0.0,
                                           y: ciImage.extent.height)
         transform = transform.scaledBy(x: 1.0, y: -1.0)
