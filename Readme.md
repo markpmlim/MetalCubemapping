@@ -196,6 +196,10 @@ Suppose the initial position of the camera is pointing at the +Z face. If we cal
 <br />
 <br />
 
+Thanks to the authors who had posted the articles and graphics on the Internet.
+
+<br />
+<br />
 
 **Requirements:** XCode 9.x, Swift 4.x and macOS 10.13.4 or later.
 <br />
