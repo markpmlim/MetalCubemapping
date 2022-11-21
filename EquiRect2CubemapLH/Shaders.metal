@@ -48,16 +48,14 @@ typedef struct
 
 #define SRGB_ALPHA 0.055
 
-float linear_from_srgb(float x)
-{
+float linear_from_srgb(float x) {
     if (x <= 0.04045)
         return x / 12.92;
     else
         return powr((x + SRGB_ALPHA) / (1.0 + SRGB_ALPHA), 2.4);
 }
 
-float3 linear_from_srgb(float3 rgb)
-{
+float3 linear_from_srgb(float3 rgb) {
     return float3(linear_from_srgb(rgb.r),
                   linear_from_srgb(rgb.g),
                   linear_from_srgb(rgb.b));
@@ -67,8 +65,7 @@ vertex MappingVertex
 cubeMapVertexShader(CubeVertex              vertexIn        [[stage_in]],
                     unsigned int            instanceId      [[instance_id]],
                     constant Uniforms       &uniforms       [[buffer(1)]],
-                    device InstanceParams *instanceParms    [[buffer(2)]])
-{
+                    device InstanceParams *instanceParms    [[buffer(2)]]) {
     float4 position = vertexIn.position;
 
     MappingVertex outVert;
@@ -84,13 +81,11 @@ cubeMapVertexShader(CubeVertex              vertexIn        [[stage_in]],
 }
 
 
-// Left-hand - this function is based on a DirectX Pixel Shader.
+// Left-hand
 // Helper function
 constant float2 invAtan = float2(1/(2*M_PI_F), 1/M_PI_F);   // float2(1/2π, 1/π);
 
-// Working as expected. faceIndex no longer required.
-float2 sampleSphericalMap_LH(float3 direction, uint faceIndex)
-{
+float2 sampleSphericalMap(float3 direction) {
     // Original code:
     //      tan(θ) = dir.z/dir.x and sin(φ) = dir.y/1.0
     float2 uv = float2(atan2(direction.x, direction.z),
@@ -118,9 +113,7 @@ outputCubeMapTexture(MappingVertex      mappingVertex   [[stage_in]],
 
     // Magnitude of direction is 1.0 upon normalization.
     float3 direction = normalize(mappingVertex.worldPosition.xyz);
-    uint faceIndex = mappingVertex.whichLayer;
-    // The paramter faceIndex is not used.
-    float2 uv = sampleSphericalMap_LH(direction, faceIndex);
+    float2 uv = sampleSphericalMap(direction);
     half4 color = equirectangularMap.sample(mapSampler, uv);
 
     return color;
@@ -152,8 +145,10 @@ CubeLookupShader(VertexOut fragmentIn               [[stage_in]],
     constexpr sampler cubeSampler(mip_filter::linear,
                                   mag_filter::linear,
                                   min_filter::linear);
-    // Don't have to flip horizontally anymore.
-    float3 texCoords = float3(fragmentIn.texCoords.x, fragmentIn.texCoords.y, fragmentIn.texCoords.z);
+    // The images are not flip horizontally or vertically.
+    float3 texCoords = float3(fragmentIn.texCoords.x,
+                              fragmentIn.texCoords.y,
+                              fragmentIn.texCoords.z);
     return cubemapTexture.sample(cubeSampler, texCoords);
 }
 
@@ -172,15 +167,15 @@ ReflectionVertexShader(VertexIn vertexIn            [[stage_in]],
     // Transform vertex's position from model coordinates to world coordinates.
     float4 positionWC = uniforms.modelMatrix * positionMC;
     // Compute the direction of the incident ray which is from
-    // the camera to the vertex in world space.
+    //  the camera to the vertex in world space.
     float4 viewDirectionWC = normalize(positionWC - cameraPositionWC);
 
     VertexOut vertexOut;
     // Transform the normal from model space to world space.
     float4 normalWC = normalize(uniforms.normalMatrix * normalMC);
     // Compute the reflected ray; the direction of this ray will be used
-    // to access the cubemap texture. No need to normalize since both
-    // vectors are already normalized.
+    //  to access the cubemap texture. No need to normalize since both
+    //  vectors are already normalized.
     vertexOut.texCoords = reflect(viewDirectionWC, normalWC);
     // Transform incoming vertex's position into clip space
     vertexOut.position = uniforms.projectionMatrix * uniforms.viewMatrix * positionWC;

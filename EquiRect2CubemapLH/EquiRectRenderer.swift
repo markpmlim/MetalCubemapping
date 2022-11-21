@@ -53,7 +53,7 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
     var cubeMesh: Mesh!
     var uniformsBuffers = [MTLBuffer]()
     var instanceParmsBuffer: MTLBuffer!
-    let cubemapResolution = 512
+    let cubemapResolution = 1280
 
     var hdrTexture: MTLTexture!
     var cubeMapTexture: MTLTexture!
@@ -110,7 +110,7 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
 
         let textureLoader = MTKTextureLoader(device: self.device)
         do {
-            hdrTexture = try textureLoader.newTexture(fromRadianceFile: "equirectImage.hdr")
+            hdrTexture = try textureLoader.newTexture(fromRadianceFile: "before.hdr")
         }
         catch let error as NSError {
             Swift.print("Can't load hdr file:\(error)")
@@ -219,24 +219,29 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
     }
 
     /*
-    Render using the left-hand rule to an offscreen cube map texture
-    Imagine the initial position of the camera is at the centre of the
-     cube with its forward vector pointing in the direction of +z and
-     its up vector pointing in the direction of +y.
+     The six 2D sub-textures of a cubemap must follow Renderman specifications.
+     The origins of their texture coordinates are at the upper-left corner of
+      the quads (which are squares) with their u-axes pointing right and
+     their v-axes pointing vertically downwards (wrt to the origins).
+     The pixel coordinates of Metal also starts at the upper-left corner.
+     See the article "What is the coordinate system used in metal?" posted
+      on stackoverflow.
+
+     The cubemap texture produced by this demo is rendered using the left-hand rule
+      to an offscreen framebuffer object.
+     To capture a cubemap from an equirectangular a virtual camera is placed at the centre
+      of a cube. The initial position of the camera is such that its forward vector is
+      pointing along the direction of +z and its up vector pointing in the direction of +y.
+
      */
     func createCubemapTexture_LH() {
 
-        // Only +X and +Y faces are generated correctly.
-        // The other faces are generated correctly but the order is wrong.
-        // +X should be right, left face is generated.
-        // -X should be left, right face is generated.
-        // +Y should be top, bottom face is generated.
-        // -Y should be bottom, top face is generated.
         let captureProjectionMatrix = matrix_perspective_left_hand(radians_from_degrees(90),
                                                                    1.0,
                                                                    0.1, 10.0)
         var captureViewMatrices = [float4x4]()
         // The camera is rotated +90 degrees about the y-axis.
+        // Angles of rotations are positive clockwise for LHS.
         var viewMatrix = matrix_look_at_left_hand(float3(0, 0, 0),  // eye is at the origin of the cube.
                                                   float3(1, 0, 0),  // centre of +X face
                                                   float3(0, 1, 0))  // Up
@@ -255,7 +260,7 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
                                               float3(0, 0, -1))
         captureViewMatrices.append(viewMatrix)
 
-        // We rotate the camera  is rotated +90 degrees about the x-axis.
+        // We rotate the camera is rotated +90 degrees about the x-axis.
        viewMatrix = matrix_look_at_left_hand(float3( 0,  0, 0),
                                              float3(0, -1, 0),     // centre of -Y face
                                              float3(0,  0, 1))
@@ -285,11 +290,11 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
         }
 
         let commandBuffer = commandQueue.makeCommandBuffer()!
-        commandBuffer.label = "Capture"
+        commandBuffer.label = "Capture cubemap"
         commandBuffer.addCompletedHandler {
             cb in
             if commandBuffer.status == .completed {
-                //print("The textures of each face of the Cube Map were created successfully.")
+                print("The textures of each face of the Cube Map were created successfully.")
             }
             else {
                 if commandBuffer.status == .error {
@@ -310,6 +315,7 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
         let viewPort = MTLViewport(originX: 0, originY: 0,
                                    width: Double(cubemapResolution), height: Double(cubemapResolution),
                                    znear: 0, zfar: 1)
+        // The following instruction is mandatory.
         commandEncoder.setViewport(viewPort)
         commandEncoder.setVertexBuffer(cubeMesh.vertexBuffer,
                                        offset: cubeMesh.vertexBufferOffset,
@@ -334,7 +340,7 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
         // End encoding commands for this render pass.
         commandEncoder.endEncoding()
         commandBuffer.commit()
-        commandBuffer.waitUntilCompleted()
+        //commandBuffer.waitUntilCompleted()
     }
 
 
@@ -484,7 +490,7 @@ class EquiRectagularRenderer: NSObject, MTKViewDelegate {
             }
             commandBuffer.present(drawable)
             commandBuffer.commit()
-            commandBuffer.waitUntilCompleted()
+            //commandBuffer.waitUntilCompleted()
         }
         currentFrameIndex = (currentFrameIndex + 1) % kMaxInFlightFrameCount
     }
