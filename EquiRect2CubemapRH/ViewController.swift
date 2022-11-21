@@ -13,7 +13,7 @@ import MetalKit
 class ViewController: NSViewController {
     @IBOutlet var mtkView: MTKView!
 
-    var renderer: Renderer!
+    var renderer: EquiRectagularRenderer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +24,8 @@ class ViewController: NSViewController {
         mtkView.colorPixelFormat = .rgba16Float
         // A depth buffer is required
         mtkView.depthStencilPixelFormat = .depth32Float
-        renderer = Renderer(view: mtkView,
-                            device: device)
+        renderer = EquiRectagularRenderer(view: mtkView,
+                                          device: device)
         mtkView.delegate = renderer     // this is necessary.
 
         let size = mtkView.drawableSize
@@ -44,24 +44,13 @@ class ViewController: NSViewController {
         self.mtkView.window!.makeFirstResponder(self)
     }
 
-    func createCGImage(from ciImage: CIImage) -> CGImage? {
-        let ciContext = CIContext(mtlDevice: mtkView.device!)
-        let cgRect = ciImage.extent
-        let cgImage = ciContext.createCGImage(ciImage,
-                                              from: cgRect,
-                                              format: kCIFormatRGBAh,
-                                              colorSpace: CGColorSpaceCreateDeviceRGB())
-        return cgImage
-    }
-
-
     func writeTexture(_ cubeMapTexture: MTLTexture,
                       with prefixName: String,
                       at directoryURL: URL) {
         for i in 0..<6 {
-            let fileName = prefixName + String(i) + ".hdr"
+            let fileName = prefixName + String(i) + ".heic"
             let url = directoryURL.appendingPathComponent(fileName)
-
+            let ciContext = CIContext()
             //let rangeOfSlices = i..<(i+1)
             let rangeOfSlices = Range(i..<(i+1))
             let faceTexture = cubeMapTexture.makeTextureView(pixelFormat: cubeMapTexture.pixelFormat,
@@ -69,18 +58,22 @@ class ViewController: NSViewController {
                                                              levels: 0..<1,
                                                              slices: rangeOfSlices)!
             var ciImage = CIImage(mtlTexture: faceTexture, options: nil)!
-
-            var transform = CGAffineTransform(translationX: 0.0,
-                                              y: ciImage.extent.height)
             // We need to flip the image vertically.
+            var transform = CGAffineTransform(translationX: 0.0, y: ciImage.extent.height)
             transform = transform.scaledBy(x: 1.0, y: -1.0)
-
+            //ciImage = ciImage.transformed(by: transform, highQualityDownsample: true)
             ciImage = ciImage.transformed(by: transform)
-            let cgImage = createCGImage(from: ciImage)
-            var error: NSError?
-            let ok = writeCGImage(cgImage!, url, &error)
-            if !ok {
-                Swift.print(error)
+            do {
+                let options = [kCGImageDestinationLossyCompressionQuality : 0.5]
+                let colorSpace = CGColorSpace(name: CGColorSpace.extendedLinearSRGB)
+                try ciContext.writeHEIFRepresentation(of: ciImage,
+                                                      to: url,
+                                                      format: kCIFormatRGBA16,
+                                                      colorSpace: colorSpace!, //CGColorSpaceCreateDeviceRGB(),
+                                                      options: options)
+            }
+            catch let error {
+                print("Can't save the compressed graphic files: \(error)")
             }
         }
     }

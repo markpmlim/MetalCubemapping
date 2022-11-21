@@ -1,6 +1,6 @@
 //
 //  Shaders.metal
-//  EquitRect2CubemapRH
+//  TexturedCube1
 //
 //  Created by Mark Lim Pak Mun on 11/10/2020.
 //  Copyright © 2020 Mark Lim Pak Mun. All rights reserved.
@@ -52,6 +52,7 @@ typedef struct
 
 float linear_from_srgb(float x)
 {
+    //rgb = mix(rgb*0.0774, pow(rgb*0.9479 + 0.05213, 2.4), step(0.04045,rgb))
     if (x <= 0.04045)
         return x / 12.92;
     else
@@ -89,41 +90,38 @@ constant float2 invAtan = float2(0.15915, 0.31831);   // 1/2π, 1/π
 // Helper function
 
 /*
+ Result: the six faces are in the correct order but all are
+  flip horizontally.
  The 3D coodinate system in Metal is different from that of OpenGL.
     + x-axis: horizontally right
     + y-axis: vertically up
     + z-axis: perpendicularly into the screen
-    
-  The 2D Texture coodinate system in Metal is also different from that of OpenGL.
-    origin: top left hand corner
-    s-axis: horizontally from left to the right
-    t-axis: vertically from top to bottom
  */
-float2 sampleSphericalMap(float3 direction, uint faceIndex)
-{
-    float2 uv;
+float2 sampleSphericalMap(float3 direction) {
+ 
     // Original code:
-    // tan(θ) = dir.z/dir.x and sin(φ) = dir.y/1.0
-    if (faceIndex == 2 || faceIndex == 3)
-    {   // top, bottom
-        uv = float2(atan2(direction.x, -direction.z),
-                    -asin(direction.y));
-    }
-    else
-    {
-        // left, right, front, back.
-        uv = float2(atan2(direction.x, direction.z),
-                    asin(direction.y));
-
-    }
-    // The range of uv.x: [ -π,   π ] --> [-0.5, 0.5]
-    // The range of uv.y: [-π/2, π/2] --> [-0.5, 0.5]
+    //      tan(θ) = dir.z/dir.x and sin(φ) = dir.y/1.0
+    float2 uv = float2(atan2(direction.x, direction.z),
+                       asin(-direction.y));
+    
+    // The range of u: [ -π,   π ] --> [-0.5, 0.5]
+    // The range of v: [-π/2, π/2] --> [-0.5, 0.5]
     uv *= invAtan;
-    uv += 0.5;          // [0, 1] for both uv.x & uv.y
+    uv += 0.5;          // [0, 1] for both u & v
+
+/*
+     If we add the following instruction, the order of the +X and -X faces are wrong.
+     But the order of the rest of the faces (+Y, -Y, +Z and -Z) are correct.
+     And none of the six faces are flipped horizontally or vertically.
+
+    uv.x = 1.0 - uv.x;
+ */
+    uv.x = 1.0 - uv.x;
     return uv;
 }
 
 // Render to an offscreen texture object in this case a 2D texture.
+// Metal texture coord system: left hand
 fragment half4
 outputCubeMapTexture(MappingVertex      mappingVertex   [[stage_in]],
                      texture2d<half> equirectangularMap [[texture(0)]])
@@ -135,8 +133,8 @@ outputCubeMapTexture(MappingVertex      mappingVertex   [[stage_in]],
                                  min_filter::linear);
 
     float3 direction = normalize(mappingVertex.worldPosition.xyz);
-    uint faceIndex = mappingVertex.whichLayer;
-    float2 uv = sampleSphericalMap(direction, faceIndex);
+    //uint faceIndex = mappingVertex.whichLayer;
+    float2 uv = sampleSphericalMap(direction);
     half4 color = equirectangularMap.sample(mapSampler, uv);
 /*
     float3 srgbColor = float3(color.rgb);
@@ -164,7 +162,7 @@ SkyboxVertexShader(VertexIn vertexIn             [[stage_in]],
     return outVert;
 }
 
-// The uniforms parameter is declared but is not used.
+// The Uniforms are not used but to be declared.
 fragment float4
 CubeLookupShader(VertexOut fragmentIn               [[stage_in]],
                  texturecube<float> cubemapTexture  [[texture(0)]],
@@ -173,10 +171,10 @@ CubeLookupShader(VertexOut fragmentIn               [[stage_in]],
     constexpr sampler cubeSampler(mip_filter::linear,
                                   mag_filter::linear,
                                   min_filter::linear);
-    // The 3D coordinate system of the cube map is left-handed as viewed from the inside of the cube.
-    // So we must add a '-' to z-coord if the skybox is projected with the right-hand rule.
-    // We have set Front Facing to be anti-clockwise.
-    float3 texCoords = float3(fragmentIn.texCoords.x, fragmentIn.texCoords.y, -fragmentIn.texCoords.z);
+    // The images are not flip horizontally or vertically.
+    float3 texCoords = float3(fragmentIn.texCoords.x,
+                              fragmentIn.texCoords.y,
+                              fragmentIn.texCoords.z);
     return cubemapTexture.sample(cubeSampler, texCoords);
 }
 
