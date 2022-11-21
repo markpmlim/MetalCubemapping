@@ -16,10 +16,9 @@ Header for common utility functions.
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MTKTextureLoader (STB)
-/// As a source of HDR input, renderer leverages radiance (.hdr) files.
-///  This helper method provides a radiance file
-/// loaded into an MTLTexture given a source file name
-/// Supposed to throw when called from Swift.
+/// As a source of HDR input, renderer leverages on radiance (.hdr) files.
+/// This helper method returns an instance of MTLTexture given a source file name.
+/// Will throw when called from Swift.
 
 - (id<MTLTexture> _Nullable) newTextureFromRadianceFile:(NSString *_Nullable)fileName
                                                   error:(NSError **)error;

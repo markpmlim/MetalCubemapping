@@ -20,18 +20,18 @@ Implementation of common utility functions.
 
 // --
 // Modification of code from Apple's PostProcessingPipeline project
+// Returns an instance of MTLTexture with a texture type MTLTextureType.type2D
+//  and a pixelFormat MTLPixelFormat.rgba16Float
 @implementation MTKTextureLoader (STB)
 
 - (id<MTLTexture>_Nullable) newTextureFromRadianceFile:(NSString *_Nullable)fileName
-                                                 error:(NSError *__nullable *__nullable)error
-{
+                                                 error:(NSError *__nullable *__nullable)error {
+
     // --------------
     // Validate input
 
-    if (![fileName containsString:@"."])
-    {
-        if (error != NULL)
-        {
+    if (![fileName containsString:@"."]) {
+        if (error != NULL) {
             *error = [[NSError alloc] initWithDomain:@"File load failure."
                                                 code:0xdeadbeef
                                             userInfo:@{NSLocalizedDescriptionKey : @"No file extension provided."}];
@@ -41,10 +41,8 @@ Implementation of common utility functions.
 
     NSArray * subStrings = [fileName componentsSeparatedByString:@"."];
 
-    if ([subStrings[1] compare:@"hdr"] != NSOrderedSame)
-    {
-        if (error != NULL)
-        {
+    if ([subStrings[1] compare:@"hdr"] != NSOrderedSame) {
+        if (error != NULL) {
             *error = [[NSError alloc] initWithDomain:@"File load failure."
                                                 code:0xdeadbeef
                                             userInfo:@{NSLocalizedDescriptionKey : @"Only (.hdr) files are supported."}];
@@ -68,15 +66,12 @@ Implementation of common utility functions.
                                 &numOfChannels,
                                 4);
 
-    if (srcData == NULL)
-    {
-        if (error != NULL)
-        {
+    if (srcData == NULL) {
+        if (error != NULL) {
             *error = [[NSError alloc] initWithDomain:@"File load failure."
                                                 code:0xdeadbeef
                                             userInfo:@{NSLocalizedDescriptionKey : @"Unable to load raw image data."}];
         }
-
         return nil;
     }
 
@@ -95,8 +90,8 @@ Implementation of common utility functions.
 
     uint16_t * dstData = (uint16_t *)malloc(kDstSize);
 
-    for (size_t texIdx = 0; texIdx < kPixelCount; ++texIdx)
-    {
+    for (size_t texIdx = 0; texIdx < kPixelCount; ++texIdx) {
+
         const float * currSrc = srcData + (texIdx * kSrcChannelCount);
         uint16_t * currDst = dstData + (texIdx * kDstChannelCount);
 
