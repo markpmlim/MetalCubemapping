@@ -25,6 +25,7 @@ class Renderer : NSObject, MTKViewDelegate {
     var offScreenRenderPassDescriptor: MTLRenderPassDescriptor!
     var equiRectangularTexture: MTLTexture!
     // Set the dimensions of the texture to be generated.
+    // The width of an equirectangular images is always 2x its height.
     var equiRectMapWidth: Int = 1024
     var equiRectMapHeight: Int = 512
 
@@ -80,12 +81,12 @@ class Renderer : NSObject, MTKViewDelegate {
                 faceTextures.append(hdrTexture!)
             }
             catch let error as NSError {
-                Swift.print("Can't load hdr file:\(error)")
+                Swift.print("Can't load hdr file:\(name) error:\(error)")
                 exit(1)
             }
         }
 
-        // We expect the cube's width, height and length of equal.
+        // We assume the widths and heights of the six 2D textures are equal.
         let imageWidth = faceTextures[0].width
         let imageHeight = faceTextures[0].height
         let textureDescriptor = MTLTextureDescriptor.textureCubeDescriptor(pixelFormat: .rgba16Float,
@@ -98,7 +99,7 @@ class Renderer : NSObject, MTKViewDelegate {
         let bytesPerRow = bytesPerPixel * imageWidth
         let bytesPerImage = bytesPerRow * imageHeight
         for i in 0..<faceTextures.count {
-            // Currently, macOS does not the primitive type half floats; however, MSL does.
+            // Currently, Swift does not the primitive type half floats; however, MSL does.
             // A half float has the same size as a UInt16.
             let destPixels = UnsafeMutablePointer<UInt16>.allocate(capacity: 4 * imageWidth * imageHeight)
             faceTextures[i].getBytes(destPixels,
@@ -116,13 +117,13 @@ class Renderer : NSObject, MTKViewDelegate {
 
         // The offscreen generated texture will be displayed using this geometry.
         // The ratio of the width to height of the quad = 1:1.
-        // The rectangle rendered must fit the currenDrawable's size.
-        // The idea is no matter how the user may resize the window,
-        // its contents will fill the entire view.
+        // The origin of the texture coordinate system of this quad is at its
+        //  top left corner with the u-axis pointing to the right horizontally
+        //  and the v-axis pointing vertically downwards.
         let quadVertices: [QuadVertex] = [
             //              Positions                        TexCoords
             QuadVertex(position: float2(-1.0, -1.0), texCoord: float2(0.0, 1.0)),
-            QuadVertex(position: float2(-1.0,  1.0), texCoord: float2(0.0, 0.0)),
+            QuadVertex(position: float2(-1.0,  1.0), texCoord: float2(0.0, 0.0)),   // top left corner = origin of texture coord system
             QuadVertex(position: float2( 1.0, -1.0), texCoord: float2(1.0, 1.0)),
             QuadVertex(position: float2( 1.0,  1.0), texCoord: float2(1.0, 0.0))
         ]
@@ -149,6 +150,7 @@ class Renderer : NSObject, MTKViewDelegate {
         else {
             fatalError("Could not load default library from main bundle")
         }
+
         // This pipeline state will be used to display the generated texture.
         let quadPipelineDescriptor = MTLRenderPipelineDescriptor()
         quadPipelineDescriptor.label = "Drawable Render Pipeline"
@@ -169,7 +171,7 @@ class Renderer : NSObject, MTKViewDelegate {
             Swift.print("Failed to created quad pipeline state - error:", error)
         }
         ///
-        // Need another pipeline state to render the 1:1 quad.
+        // Need another pipeline state to render a 1:1 quad offscreen.
         let equiRectVertexProgram = library.makeFunction(name: "projectTexture")
         // Load the fragment program into the library
         let equiRectFragmentProgram = library.makeFunction(name: "outputEquiRectangularTexture")
@@ -177,7 +179,7 @@ class Renderer : NSObject, MTKViewDelegate {
         quadPipelineDescriptor.vertexFunction = equiRectVertexProgram
         quadPipelineDescriptor.fragmentFunction = equiRectFragmentProgram
         quadPipelineDescriptor.depthAttachmentPixelFormat = .invalid
-        // The geometry (a 2x2 quad) is embedded in the vertex function.
+        // The geometry (of this 2x2 quad) is embedded in the vertex function.
         quadPipelineDescriptor.vertexDescriptor = nil
         do {
             try offscreenPipelineState = device.makeRenderPipelineState(descriptor: quadPipelineDescriptor)
@@ -186,7 +188,7 @@ class Renderer : NSObject, MTKViewDelegate {
             Swift.print("Failed to created offscreen pipeline state - error:", error)
         }
 
-        // Bug resolved: the dimensions of the generated texture is 2:1
+        // The ratio of the dimensions of the generated texture must be declared 2:1
         let texDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: view.colorPixelFormat,
                                                                      width: equiRectMapWidth, height: equiRectMapHeight,
                                                                      mipmapped: false)
@@ -202,6 +204,7 @@ class Renderer : NSObject, MTKViewDelegate {
     }
 
     // Generate a 2D texture whose dimensions are 2:1.
+    // This equirectangular texture is rendered offscreen.
     func createEquiRectangularTexture() {
         if let commandBuffer = commandQueue.makeCommandBuffer() {
             commandBuffer.addCompletedHandler {
@@ -238,7 +241,7 @@ class Renderer : NSObject, MTKViewDelegate {
 
             commandEncoder.endEncoding()
             commandBuffer.commit()
-            commandBuffer.waitUntilCompleted()
+            //commandBuffer.waitUntilCompleted()
         }
     }
 
@@ -259,7 +262,7 @@ class Renderer : NSObject, MTKViewDelegate {
             let renderQuadEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)!
             renderQuadEncoder.setRenderPipelineState(quadPipelineState)
             renderQuadEncoder.setFrontFacing(.clockwise)
-            // Note: the geometry is a 1:1 quad.
+            // Note: the geometry is a 1:1 quad but the output texture is 2:1.
             renderQuadEncoder.setVertexBuffer(quadBuffer,
                                               offset: 0,
                                               index: 0)

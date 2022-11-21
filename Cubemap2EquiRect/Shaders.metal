@@ -3,11 +3,7 @@
 
 using namespace metal;
 
-struct EquiRectVertex {
-    float2 position;
-    float2 texCoord;
-};
-
+// This struct is used by both pairs of shaders.
 typedef struct {
     float4 renderedCoordinate [[position]]; // clip space
     float2 position;
@@ -16,35 +12,35 @@ typedef struct {
 } TextureMappingVertex;
 
 // X from -1..+1, Y from -1..+1
-// Projects provided vertices to corners of offscreen texture.
+// Projects the provided vertices to the corners of the offscreen texture.
 // Irrespective of whether
 //      a) the quad is anti-clockwise or clockwise,
 //      b) the texcoord system is +t downwards or upwards,
 // the output of the fragment function is the same.
 vertex TextureMappingVertex
-projectTexture(unsigned int vertex_id  [[ vertex_id ]])
-{
-    // Triangle's geometry in NDC (normalized device coords).
-
+projectTexture(unsigned int vertex_id  [[ vertex_id ]]) {
+    // Quad's geometry is in NDC (normalized device coords).
     // The vertices of the quad are anti-clockwise.
     float4 renderedCoordinates[6] = {
-        float4(-1.0, -1.0, 0.0, 1.0),
-        float4( 1.0, -1.0, 0.0, 1.0),
-        float4(-1.0,  1.0, 0.0, 1.0),
+        float4(-1.0, -1.0, 0.0, 1.0),   // A
+        float4( 1.0, -1.0, 0.0, 1.0),   // B
+        float4(-1.0,  1.0, 0.0, 1.0),   // D
 
-        float4( 1.0, -1.0, 0.0, 1.0),
-        float4( 1.0,  1.0, 0.0, 1.0),
-        float4(-1.0,  1.0, 0.0, 1.0),
+        float4( 1.0, -1.0, 0.0, 1.0),   // B
+        float4( 1.0,  1.0, 0.0, 1.0),   // C
+        float4(-1.0,  1.0, 0.0, 1.0),   // D
     };
-    // The texture coord system has the origin (0, 0) at the upper left
-    // The s-axis is +ve right and the t-axis is +ve up
+    // The texture coord system has the origin (0, 0) at the lower left.
+    // The u-axis is +ve to the right and the v-axis is +ve UP.
+    // The origin of Metal's texture coord system is the upper left
+    //  with the u-axis is +ve to the right and the v-axis is +ve DOWN.
     float2 textureCoordinates[6] = {
-        float2(0.0, 0.0),
-        float2(0.0, 1.0),
-        float2(1.0, 0.0),
-        float2(0.0, 1.0),
-        float2(1.0, 1.0),
-        float2(1.0, 0.0)
+        float2(0.0, 0.0),   // A
+        float2(1.0, 0.0),   // B
+        float2(0.0, 1.0),   // D
+        float2(1.0, 0.0),   // B
+        float2(1.0, 1.0),   // C
+        float2(0.0, 1.0)    // D
     };
 
     TextureMappingVertex outVertex;
@@ -114,7 +110,7 @@ outputEquiRectangularTexture(TextureMappingVertex  mappingVertex [[stage_in]],
     float2 a = uv * float2(3.14159265,  // π
                            1.57079633); // π/2
     // θ = a.x,  φ = a.y
-    // Range for θ = [-π, π] and Range for φ = [-π/2, π/2]
+    // Range for θ = [-π, π] and range for φ = [-π/2, π/2]
     // Convert to 3D Cartesian coordinates
     float2 c = cos(a);      // c.x = cos(θ) c.y = cos(φ)
     float2 s = sin(a);      // s.x = sin(θ) s.y = sin(φ)
@@ -124,12 +120,19 @@ outputEquiRectangularTexture(TextureMappingVertex  mappingVertex [[stage_in]],
     return color;
 }
 
+
+/// This should match the Swift struct "QuadVertex"
+struct QuadVertex {
+    float2 position;
+    float2 texCoord;
+};
+
 /*
- The dimensions of the quad passed is 1:1.
+ The dimensions of the quad passed as a uniform to this vertex function is 1:1.
  */
 vertex TextureMappingVertex
 simpleVertexShader(unsigned int                 vertex_id   [[ vertex_id ]],
-                   const device EquiRectVertex *vertices    [[ buffer(0) ]])
+                   const device QuadVertex      *vertices   [[ buffer(0) ]])
 {
     float2 position = vertices[vertex_id].position;
     TextureMappingVertex vert;

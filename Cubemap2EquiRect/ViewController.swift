@@ -63,8 +63,8 @@ class ViewController: NSViewController {
             Swift.print("Wrong pixel format: can't save this file")
         }
         let url = directoryURL.appendingPathComponent(name)
-        // Note: the pixel format of the mtl texture is rgba16Float.
-        // The default for GPU rendering is kCIFormatRGBAf
+        // Note: the pixel format of the mtl texture is rgba16Float (64 bits)
+        // The default for GPU rendering is kCIFormatRGBAf (128 bits)
         let options: [String : Any] = [
             String(kCIContextWorkingFormat) : NSNumber(value: kCIFormatRGBAh)
         ]
